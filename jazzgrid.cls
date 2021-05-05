@@ -37,6 +37,12 @@
 \RequirePackage[fontsize=18pt]{fontsize}
 \usetikzlibrary{arrows,automata,backgrounds,calendar,chains,matrix,mindmap,patterns,petri}
 
+\setlength{\parindent}{0pt}
+\setlength{\tabcolsep}{1pt}
+\setlength{\marginparsep}{6pt}
+\setlength{\marginparwidth}{60pt}
+
+
 %% macro for sections
 \newcommand{\musicsection}[1]
 {%
