@@ -44,23 +44,26 @@
 \setlength{\marginparwidth}{60pt}
 
 
-%% macro for sections
-\newcommand{\musicsection}[1]
-{%
-	\hrule%
-	\medskip%
+%% environment for sections
+\newenvironment{musicsection}[1]
+	{%
 	\reversemarginpar%
 	\marginpar%
-	{%
-		\begin{flushright}%
-			\smash{\lower1.0em\hbox{%
-				\begin{tikzpicture}[]%
-					\draw (1,0) node[line width=1pt,draw] {\tiny\textbf{#1}\normalsize};
-				\end{tikzpicture}%
-			}}%
-		\end{flushright}%
+		{%
+			\begin{flushright}%
+				\smash{\lower1.0em\hbox{%
+					\begin{tikzpicture}[]%
+						\draw (1,0) node[line width=1pt,draw] {\tiny\textbf{#1}\normalsize};
+					\end{tikzpicture}%
+				}}%
+			\end{flushright}%
+		}
 	}
-}
+	{%
+	\hrule%
+	\medskip%
+	}
+
 
 %% macro for the major seventh
 \newcommand{\musicmaj}[0]{%
