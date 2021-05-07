@@ -27,6 +27,7 @@
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
 \RequirePackage{stackengine}
+\RequirePackage{musicography}
 \RequirePackage{ifthen}
 \RequirePackage{array}
 \RequirePackage{blindtext}
@@ -75,10 +76,18 @@
 \end{tikzpicture}%
 }
 
-%% stack used for flat/sharp/minor and extra notes
+%% stack used for flat/sharp/minor
 \newcommand{\mystack}[2]{%
 	\setstackgap{S}{2pt}%
 	#1\Shortstack[l]{#2}%
+	\normalsize%
+}
+
+%% stack used for additional chord notes
+\newcommand{\notestack}[2]{%
+	\setstackgap{S}{0pt}%
+	\setstackgap{L}{8pt}%
+	#1\Centerstack[l]{#2}%
 	\normalsize%
 }
 
@@ -87,10 +96,10 @@
 \newcommand{\note}[2]{%
 	#1%
 	\ifthenelse{ \equal{#2}{sharp} }{%
-	\smash{\raise1.0ex\hbox{\scriptsize$\sharp$\normalsize}}%
+	\smash{\raise1.0ex\hbox{\scriptsize$\musSharp$\normalsize}}%
 	}{}%
 	\ifthenelse{ \equal{#2}{flat} }{%
-	\smash{\raise0.8ex\hbox{\scriptsize$\flat$\normalsize}}%
+	\smash{\raise0.8ex\hbox{\scriptsize$\musFlat$\normalsize}}%
 	}{}%
 }
 
@@ -99,24 +108,26 @@
 	\textbf{#1}%
 	\ifthenelse{ \equal{#3}{minor} }{%
 		\ifthenelse{ \equal{#2}{sharp} }{%
-			\mystack{\scriptsize}{\textbf{$\sharp$} \textbf{\tiny{m}\normalsize}}%
+			\mystack{\scriptsize}{\textbf{$\musSharp$} \textbf{\tiny{m}\normalsize}}%
 		}{}%
 		\ifthenelse{ \equal{#2}{flat} }{%
-			\mystack{\scriptsize}{\textbf{$\flat$} \textbf{\tiny{m}\normalsize}}%
+			\mystack{\scriptsize}{\textbf{$\musFlat$} \textbf{\tiny{m}\normalsize}}%
 		}{}%
 		\ifthenelse{ \equal{#2}{} }{%
 			\mystack{\tiny}{\textbf{m}}%
 		}{}%
 	}{%
 		\ifthenelse{ \equal{#2}{sharp} }{%
-			\mystack{\scriptsize}{\textbf{$\sharp$} \textbf{\phantom{\tiny{m}\normalsize}}}%
+			\mystack{\scriptsize}{\textbf{$\musSharp$} \textbf{\phantom{\tiny{n}\normalsize}}}%
 		}{}%
 		\ifthenelse{ \equal{#2}{flat} }{%
-			\mystack{\scriptsize}{\textbf{$\flat$}  \textbf{\phantom{\tiny{m}\normalsize}}}%
+			\mystack{\scriptsize}{\textbf{$\musFlat$}  \textbf{\phantom{\tiny{n}\normalsize}}}%
 		}{}%
 	}%
 	\ifthenelse{ \equal{#4}{} }{}{%
-		\mystack{\tiny}{#4}%
+		\smash{\raise 8pt\vbox{%
+		\notestack{\tiny}{#4}%
+		}}%
 	}%
 	\ifthenelse{ \equal{#5}{maj} }{%
 		\smash{\raise1.5ex\hbox{\musicmaj}}%
