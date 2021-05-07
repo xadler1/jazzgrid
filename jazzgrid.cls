@@ -213,7 +213,7 @@
 
 %% macro for bar with three beats
 \newcommand{\barthree}[4]{
-	\begin{tabular}[c]{ m{0pt} m{40pt} m{40pt} m{40pt} }
+	\begin{tabular}[c]{ m{0pt} m{38pt} m{38pt} m{38pt} }
 		{#1} & {#2} & {#3} & {#4}
 	\end{tabular}
 }
@@ -270,6 +270,11 @@
 		\smash{\vbox{\moveright 0.5em\hbox {\sixteenthrest}}}%
 	}{}
 	\normalsize
+}
+
+%% repeat macro
+\newcommand{\repeatsection}[1]{
+	\leftrepeat #1 \rightrepeat%
 }
 
 %% custom title
