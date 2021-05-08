@@ -28,6 +28,7 @@
 \RequirePackage[T1]{fontenc}
 \RequirePackage{stackengine}
 \RequirePackage[minimal]{leadsheets}
+%\RequirePackage{musicography}
 \RequirePackage{ifthen}
 \RequirePackage{amssymb}
 \RequirePackage{array}
@@ -141,6 +142,13 @@
 	\normalsize%
 }
 
+%% stack used for composer and tempo
+\newcommand{\rightstack}[2]{%
+	\setstackgap{S}{4pt}%
+	#1\Shortstack[r]{#2}%
+	\normalsize%
+}
+
 
 %% macro for a single note name, currently unused
 \newcommand{\note}[2]{%
@@ -149,7 +157,7 @@
 	\smash{\raise1.0ex\hbox{\scriptsize$\sharp$\normalsize}}%
 	}{}%
 	\ifthenelse{ \equal{#2}{flat} }{%
-	\smash{\raise0.8ex\hbox{\scriptsize$\flatg$\normalsize}}%
+	\smash{\raise0.8ex\hbox{\scriptsize$\flat$\normalsize}}%
 	}{}%
 }
 
@@ -178,7 +186,7 @@
 				\mystack{\tiny}{\textbf{$\sharp$} \textbf{\tiny{m}\normalsize}}%
 			}{}%
 			\ifthenelse{ \equal{#2}{flat} }{%
-				\mystack{\tiny}{\textbf{$\flatg$} \textbf{\tiny{m}\normalsize}}%
+				\mystack{\tiny}{\textbf{$\flat$} \textbf{\tiny{m}\normalsize}}%
 			}{}%
 			\ifthenelse{ \equal{#2}{} }{%
 				\mystack{\tiny}{\textbf{m}}%
@@ -188,7 +196,7 @@
 				\mystack{\tiny}{\textbf{$\sharp$} \textbf{\phantom{\tiny{n}\normalsize}}}%
 			}{}%
 			\ifthenelse{ \equal{#2}{flat} }{%
-				\mystack{\tiny}{\textbf{$\flatg$}  \textbf{\phantom{\tiny{n}\normalsize}}}%
+				\mystack{\tiny}{\textbf{$\flat$}  \textbf{\phantom{\tiny{n}\normalsize}}}%
 			}{}%
 		}%
 		\ifthenelse{ \equal{#4}{} }{%
@@ -321,6 +329,17 @@
 	\newcommand\printcomposer{#1}
 }
 
+%% macro for setting the tempo
+\newcommand{\tempo}[1]{
+	\newcommand\printtempo{%
+		\ifthenelse{ \equal{#1}{} }{
+			\phantom{bpm}%
+		}{%
+			\tiny{{#1}bpm}\normalsize%
+		}%
+	}%
+}
+
 %% macro for setting the title
 \renewcommand{\title}[1]{
 	\newcommand\printtitle{#1}
@@ -356,7 +375,8 @@
 \renewcommand{\maketitle}[0]{
 	\Large{\printtitle}\normalsize
 	\hfill
-	\smash{\raise1.5ex\hbox{\tiny{\printcomposer}\normalsize}}%
+	%\smash{\raise1.5ex\hbox{\tiny{\printcomposer}\normalsize}}%
+	\rightstack{\tiny\raggedleft}{ {\printcomposer} {\printtempo} }
 	\bigskip
 	\bigskip
 }
