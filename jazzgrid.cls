@@ -27,7 +27,6 @@
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
 \RequirePackage{stackengine}
-%\RequirePackage{musicography}
 \RequirePackage[minimal]{leadsheets}
 \RequirePackage{ifthen}
 \RequirePackage{amssymb}
@@ -48,9 +47,48 @@
 \setlength{\marginparsep}{6pt}
 \setlength{\marginparwidth}{60pt}
 
-\newcommand\x{0.0}%
-\newcommand\tmpx{0.0}%
-\newcommand\y{0.0}%
+\newcommand\x{0}%
+\newcommand\y{0}%
+\newcommand\codashift{0}%
+\newcommand\codaratio{0}%
+
+%% macro for coda symbol
+\newcommand{\coda}[2]{%
+	%\renewcommand\codaratio{0}%
+	%\renewcommand\codashift{0}%
+	\DIVIDE{127}{#2}{\codaratio}%
+	\MULTIPLY{#1}{\codaratio}{\codashift}%
+	\SUBTRACT{\codashift}{\codaratio}{\codashift}%
+	\ADD{\codashift}{2}{\codashift}%
+	\smash{\raise 37pt\vbox to 0pt {\moveright \codashift pt\hbox to 0pt{%
+		\textbf{O}%
+		\smash{\raise 14.0pt\vbox to 0pt {\moveleft 15.75pt\hbox to 0pt{%
+			\begin{tikzpicture}[]%
+				\draw [thick] (0,0) -- (16pt,0);
+				\draw [thick] (8pt,8pt) -- (8pt,-8pt);
+			\end{tikzpicture}%
+		}}}%
+	}}}%
+}
+
+%% macro for smaller coda symbol
+\newcommand{\codasmall}[2]{%
+	%\renewcommand\codaratio{0}%
+	%\renewcommand\codashift{0}%
+	\DIVIDE{127}{#2}{\codaratio}%
+	\MULTIPLY{#1}{\codaratio}{\codashift}%
+	\SUBTRACT{\codashift}{\codaratio}{\codashift}%
+	\ADD{\codashift}{2}{\codashift}%
+	\smash{\raise 34pt\vbox to 0pt {\moveright \codashift pt\hbox to 0pt{%
+		\textbf{\scriptsize{O}\normalsize}%
+		\smash{\raise 10.5pt\vbox to 0pt {\moveleft 11.5pt\hbox to 0pt{%
+			\begin{tikzpicture}[]%
+				\draw [thick] (0,0) -- (12pt,0);
+				\draw [thick] (6pt,6pt) -- (6pt,-6pt);
+			\end{tikzpicture}%
+		}}}%
+	}}}%
+}
 
 
 %% environment for sections
@@ -115,39 +153,46 @@
 	\smash{\raise1.0ex\hbox{\scriptsize$\sharp$\normalsize}}%
 	}{}%
 	\ifthenelse{ \equal{#2}{flat} }{%
-	\smash{\raise0.8ex\hbox{\scriptsize$\flat$\normalsize}}%
+	\smash{\raise0.8ex\hbox{\scriptsize$\flatg$\normalsize}}%
 	}{}%
 }
 
 %% macro for chords
 \newcommand{\chord}[6]{%
 	\ifx&#6&%
-		\renewcommand\x{0.0}%
-		\renewcommand\tmpx{0.0}%
-		\renewcommand\y{0.0}%
+		\renewcommand\y{0}%
 	\else%
-		\renewcommand\x{0.0}%
-		\renewcommand\tmpx{0.0}%
-		\renewcommand\y{10.0}%
+		\renewcommand\y{10}%
+
+		\smash{\raise 7pt\vbox to 0pt{\moveleft 6pt\hbox to 0pt{{
+			\begin{tikzpicture}[]%
+				\ifthenelse{ \equal{#3}{minor} }{%
+					\draw [thick] (0,0) -- (28pt,0);
+				}{%
+					\draw [thick] (0,0) -- (20pt,0);
+				}%
+			\end{tikzpicture}%
+		}}}}%
+		\smash{\lower 10pt\vbox to 0pt{\moveleft  0pt\hbox to 0pt{{#6}}}}%
 	\fi%
-	\smash{\raise \y pt\vbox{\moveleft \x pt\hbox{{%
+	\smash{\raise \y pt\vbox{\moveleft 0pt\hbox{{%
 		\textbf{#1}%
 		\ifthenelse{ \equal{#3}{minor} }{%
 			\ifthenelse{ \equal{#2}{sharp} }{%
-				\mystack{\scriptsize}{\textbf{$\sharp$} \textbf{\tiny{m}\normalsize}}%
+				\mystack{\tiny}{\textbf{$\sharp$} \textbf{\tiny{m}\normalsize}}%
 			}{}%
 			\ifthenelse{ \equal{#2}{flat} }{%
-				\mystack{\scriptsize}{\textbf{$\flat$} \textbf{\tiny{m}\normalsize}}%
+				\mystack{\tiny}{\textbf{$\flatg$} \textbf{\tiny{m}\normalsize}}%
 			}{}%
 			\ifthenelse{ \equal{#2}{} }{%
 				\mystack{\tiny}{\textbf{m}}%
 			}{}%
 		}{%
 			\ifthenelse{ \equal{#2}{sharp} }{%
-				\mystack{\scriptsize}{\textbf{$\sharp$} \textbf{\phantom{\tiny{n}\normalsize}}}%
+				\mystack{\tiny}{\textbf{$\sharp$} \textbf{\phantom{\tiny{n}\normalsize}}}%
 			}{}%
 			\ifthenelse{ \equal{#2}{flat} }{%
-				\mystack{\scriptsize}{\textbf{$\flat$}  \textbf{\phantom{\tiny{n}\normalsize}}}%
+				\mystack{\tiny}{\textbf{$\flatg$}  \textbf{\phantom{\tiny{n}\normalsize}}}%
 			}{}%
 		}%
 		\ifthenelse{ \equal{#4}{} }{%
@@ -179,35 +224,6 @@
 			}{}%
 		}%
 	}}}}%
-	\ifx&#6&%
-	\else%
-		\ifthenelse{ \equal{#3}{minor} }{%
-			\ADD{\tmpx}{9.5}{\x}%
-			\COPY{\x}{\tmpx}%
-			\ifthenelse{ \equal{#4}{} }{}{%
-				\ADD{\tmpx}{26}{\x}%
-				\COPY{\x}{\tmpx}%
-			}%
-		}{%
-			\ifthenelse{ \equal{#2}{flat} \OR \equal{#2}{sharp}}{%
-				\ADD{\tmpx}{12}{\x}%
-				\COPY{\x}{\tmpx}%
-				\ifthenelse{ \equal{#4}{}}{}{%
-					\ADD{\tmpx}{20.5}{\x}%
-					\COPY{\x}{\tmpx}%
-				}%
-			}{%
-				\ifthenelse{ \equal{#4}{}}{}{%
-					\ADD{\tmpx}{28.5}{\x}%
-					\COPY{\x}{\tmpx}%
-				}%
-			}%
-		}%
-		\ADD{14}{\x}{\tmpx}%
-		\ADD{6}{\x}{\x}%
-		\smash{\lower 7pt\vbox{\moveleft \tmpx pt\hbox{{\textbf{/}}}}}%
-		\smash{\lower 11.4pt\vbox{\moveleft \x pt\hbox{{#6}}}}%
-	\fi%
 }
 
 %% does not work, seems like you can not have a stack inside anoter stack :D
@@ -218,10 +234,11 @@
 %% macro for one line of four bars
 \newcommand{\barline}[4]{
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{ | m{127pt} | m{127pt}| m{127pt} | m{127pt} | }
+	\begin{tabular}[c]{ | m{126.96875pt} | m{126.96875pt}| m{126.96875pt} | m{126.96875pt} | }
 		{#1} & {#2} & {#3} & {#4}
 	\end{tabular}%
-	\medskip
+	\medskip%
+
 }
 
 %% macro for one line of three bars
@@ -232,8 +249,8 @@
 		\raggedleft
 	}%
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{ m{127.25pt} | m{127pt} | m{127pt} | m{127pt}  }%
-		& {#2} & {#3} & {#4}
+	\begin{tabular}[c]{ | m{127pt} | m{127pt} | m{127pt} | }%
+		{#2} & {#3} & {#4}
 	\end{tabular}%
 	\medskip%
 }
@@ -246,8 +263,8 @@
 		\raggedleft
 	}%
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{  m{127.25pt}  m{127.5pt} | m{127pt} | m{127pt} | }%
-		&  & {#2} & {#3}
+	\begin{tabular}[c]{  | m{127pt} | m{127pt} | }%
+		{#2} & {#3}
 	\end{tabular}%
 	\medskip%
 }
@@ -260,8 +277,8 @@
 		\raggedleft
 	}%
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{ m{127.25pt} m{127.5pt} m{127.5pt} | m{127pt} | }%
-		& & & {#2}
+	\begin{tabular}[c]{ | m{127pt} | }%
+		{#2}
 	\end{tabular}%
 	\medskip%
 }
@@ -287,7 +304,7 @@
 		\draw (0pt,0pt) --
 		(0pt,8pt) --
 		(2pt,8pt) node[align=right,below,inner sep=0pt,outer sep=0pt]
-			{\smash{\lower 1pt\vbox to 0pt{\vfil \hbox to 0pt{\tiny{#1}.\normalsize}}}} --
+			{\smash{\lower 1pt\vbox to 0pt{\vfil \hbox to 0pt{\tiny{#1}\normalsize}}}} --
 		(96pt,8pt);
 	\end{tikzpicture}
 	}}}%
@@ -295,12 +312,12 @@
 
 %% macro for primavolta
 \newcommand{\primavolta}[0]{
-	\nvolta{1}
+	\nvolta{1.}
 }
 
 %% macro for secundavolta
 \newcommand{\secundavolta}[0]{
-	\nvolta{2}
+	\nvolta{2.}
 }
 
 %% macro for setting the composer
@@ -343,7 +360,7 @@
 \renewcommand{\maketitle}[0]{
 	\Large{\printtitle}\normalsize
 	\hfill
-	\smash{\raise1.5ex\hbox{\scriptsize{\printcomposer}\normalsize}}%
+	\smash{\raise1.5ex\hbox{\tiny{\printcomposer}\normalsize}}%
 	\bigskip
 	\bigskip
 }
