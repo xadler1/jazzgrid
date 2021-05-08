@@ -52,6 +52,9 @@
 \newcommand\y{0}%
 \newcommand\codashift{0}%
 \newcommand\codaratio{0}%
+\newcommand\npletshift{0}%
+\newcommand\npletratio{0}%
+\newcommand\nplethalf{0}%
 
 %% macro for coda symbol
 \newcommand{\coda}[2]{%
@@ -372,6 +375,26 @@
 %% repeat macro
 \newcommand{\repeatsection}[1]{
 	\leftrepeat #1 \rightrepeat%
+}
+
+%% nplet macro; width of nplet, maximum width of nplet, number
+\newcommand{\nplet}[3]{
+	\DIVIDE{127}{#2}{\npletratio}%
+	\MULTIPLY{#1}{\npletratio}{\npletshift}%
+	\MULTIPLY{#1}{4}{\nplethalf}%
+	\SUBTRACT{\npletshift}{\nplethalf}{\npletshift}%
+	\DIVIDE{\npletshift}{2}{\nplethalf}%
+	%\npletshift
+	\smash{\lower 5pt\vbox to 0pt {\vfil \moveleft 4pt\hbox to 0pt{
+	\begin{tikzpicture}[]
+		\draw (0pt,0pt) --
+		(0pt,-4pt) --
+		(\nplethalf pt,-4pt) node[align=center,below,inner sep=0pt,outer sep=0pt]
+			{\smash{\lower 1pt\vbox to 0pt{\vfil \hbox to 0pt{\tiny{#3}\normalsize}}}} --
+		(\npletshift pt,-4pt) --
+		(\npletshift pt,0pt);
+	\end{tikzpicture}
+	}}}%
 }
 
 %% custom title
