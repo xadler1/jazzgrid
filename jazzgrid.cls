@@ -232,8 +232,8 @@
 		\raggedleft
 	}%
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{ | m{127pt} | m{127pt} | m{127pt}  }%
-		{#2} & {#3} & {#4}
+	\begin{tabular}[c]{ m{127.25pt} | m{127pt} | m{127pt} | m{127pt}  }%
+		& {#2} & {#3} & {#4}
 	\end{tabular}%
 	\medskip%
 }
@@ -246,8 +246,8 @@
 		\raggedleft
 	}%
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{ | m{127pt} | m{127pt} | }%
-		{#2} & {#3}
+	\begin{tabular}[c]{  m{127.25pt}  m{127.5pt} | m{127pt} | m{127pt} | }%
+		&  & {#2} & {#3}
 	\end{tabular}%
 	\medskip%
 }
@@ -260,8 +260,8 @@
 		\raggedleft
 	}%
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{ | m{127pt} | }%
-		{#2}
+	\begin{tabular}[c]{ m{127.25pt} m{127.5pt} m{127.5pt} | m{127pt} | }%
+		& & & {#2}
 	\end{tabular}%
 	\medskip%
 }
