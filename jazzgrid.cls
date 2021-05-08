@@ -257,6 +257,7 @@
 		{#2} & {#3} & {#4}
 	\end{tabular}%
 	\medskip%
+
 }
 
 %% macro for one line of two bars
@@ -271,6 +272,7 @@
 		{#2} & {#3}
 	\end{tabular}%
 	\medskip%
+
 }
 
 %% macro for one line of two bars
@@ -285,6 +287,7 @@
 		{#2}
 	\end{tabular}%
 	\medskip%
+
 }
 
 %% macro for bar with four beats
