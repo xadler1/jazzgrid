@@ -30,7 +30,9 @@
 %\RequirePackage{musicography}
 \RequirePackage[minimal]{leadsheets}
 \RequirePackage{ifthen}
+\RequirePackage{amssymb}
 \RequirePackage{array}
+\RequirePackage{calculator}
 \RequirePackage{blindtext}
 \RequirePackage{enumitem}
 \RequirePackage{multicol}
@@ -45,6 +47,10 @@
 \setlength{\tabcolsep}{1pt}
 \setlength{\marginparsep}{6pt}
 \setlength{\marginparwidth}{60pt}
+
+\newcommand\x{0.0}%
+\newcommand\tmpx{0.0}%
+\newcommand\y{0.0}%
 
 
 %% environment for sections
@@ -70,16 +76,20 @@
 
 %% macro for the major seventh
 \newcommand{\musicmaj}[0]{%
+\smash{\raise 12pt\vbox to 0pt{\moveleft 2pt\hbox to 0pt{{
 \begin{tikzpicture}[]%
 	\draw (0,0) -- (4pt,0) -- (2pt,4pt) -- cycle;%
 \end{tikzpicture}%
+}}}}%
 }
 
 %% macro for the diminished seventh
 \newcommand{\musicdim}[0]{%
+\smash{\raise 12pt\vbox to 0pt{\moveleft 2pt\hbox to 0pt{{
 \begin{tikzpicture}[]%
 	\draw (0,0) circle [radius=2pt];%
 \end{tikzpicture}%
+}}}}%
 }
 
 %% stack used for flat/sharp/minor
@@ -111,41 +121,93 @@
 
 %% macro for chords
 \newcommand{\chord}[6]{%
-	\textbf{#1}%
-	\ifthenelse{ \equal{#3}{minor} }{%
-		\ifthenelse{ \equal{#2}{sharp} }{%
-			\mystack{\scriptsize}{\textbf{$\sharp$} \textbf{\tiny{m}\normalsize}}%
-		}{}%
-		\ifthenelse{ \equal{#2}{flat} }{%
-			\mystack{\scriptsize}{\textbf{$\flat$} \textbf{\tiny{m}\normalsize}}%
-		}{}%
-		\ifthenelse{ \equal{#2}{} }{%
-			\mystack{\tiny}{\textbf{m}}%
-		}{}%
-	}{%
-		\ifthenelse{ \equal{#2}{sharp} }{%
-			\mystack{\scriptsize}{\textbf{$\sharp$} \textbf{\phantom{\tiny{n}\normalsize}}}%
-		}{}%
-		\ifthenelse{ \equal{#2}{flat} }{%
-			\mystack{\scriptsize}{\textbf{$\flat$}  \textbf{\phantom{\tiny{n}\normalsize}}}%
-		}{}%
-	}%
-	\ifthenelse{ \equal{#4}{} }{}{%
-		\smash{\raise 8pt\vbox{%
-		\notestack{\tiny}{#4}%
-		}}%
-	}%
-	\ifthenelse{ \equal{#5}{maj} }{%
-		\smash{\raise1.5ex\hbox{\musicmaj}}%
-	}{}%
-	\ifthenelse{ \equal{#5}{dim} }{%
-		\smash{\raise1.5ex\hbox{\musicdim}}%
-	}{}%
-	%\ifx&#6&%
-	%\else%
-	%	\smash{\lower 5pt\vbox{\moveleft 4pt\hbox{{/}}}}%
-	%	\smash{\lower 9.6pt\vbox{\moveleft 3pt\hbox{{#6}}}}%
-	%\fi%
+	\ifx&#6&%
+		\renewcommand\x{0.0}%
+		\renewcommand\tmpx{0.0}%
+		\renewcommand\y{0.0}%
+	\else%
+		\renewcommand\x{0.0}%
+		\renewcommand\tmpx{0.0}%
+		\renewcommand\y{10.0}%
+	\fi%
+	\smash{\raise \y pt\vbox{\moveleft \x pt\hbox{{%
+		\textbf{#1}%
+		\ifthenelse{ \equal{#3}{minor} }{%
+			\ifthenelse{ \equal{#2}{sharp} }{%
+				\mystack{\scriptsize}{\textbf{$\sharp$} \textbf{\tiny{m}\normalsize}}%
+			}{}%
+			\ifthenelse{ \equal{#2}{flat} }{%
+				\mystack{\scriptsize}{\textbf{$\flat$} \textbf{\tiny{m}\normalsize}}%
+			}{}%
+			\ifthenelse{ \equal{#2}{} }{%
+				\mystack{\tiny}{\textbf{m}}%
+			}{}%
+		}{%
+			\ifthenelse{ \equal{#2}{sharp} }{%
+				\mystack{\scriptsize}{\textbf{$\sharp$} \textbf{\phantom{\tiny{n}\normalsize}}}%
+			}{}%
+			\ifthenelse{ \equal{#2}{flat} }{%
+				\mystack{\scriptsize}{\textbf{$\flat$}  \textbf{\phantom{\tiny{n}\normalsize}}}%
+			}{}%
+		}%
+		\ifthenelse{ \equal{#4}{} }{%
+			\ifthenelse{ \equal{#5}{maj} }{%
+				\smash{\raise 8pt\vbox{%
+				\notestack{\tiny}{\musicmaj}%
+				}}%
+			}{}%
+			\ifthenelse{ \equal{#5}{dim} }{%
+				\smash{\raise 8pt\vbox{%
+					\notestack{\tiny}{\musicdim}%
+				}}%
+			}{}%
+		}{%
+			\ifthenelse{ \equal{#5}{maj} }{%
+				\smash{\raise 8pt\vbox{%
+				\notestack{\tiny}{\musicmaj #4}%
+				}}%
+			}{}%
+			\ifthenelse{ \equal{#5}{dim} }{%
+				\smash{\raise 8pt\vbox{%
+					\notestack{\tiny}{\musicdim #4}%
+				}}%
+			}{}%
+			\ifthenelse{ \equal{#5}{} }{%
+				\smash{\raise 8pt\vbox{%
+				\notestack{\tiny}{#4}%
+				}}%
+			}{}%
+		}%
+	}}}}%
+	\ifx&#6&%
+	\else%
+		\ifthenelse{ \equal{#3}{minor} }{%
+			\ADD{\tmpx}{9.5}{\x}%
+			\COPY{\x}{\tmpx}%
+			\ifthenelse{ \equal{#4}{} }{}{%
+				\ADD{\tmpx}{26}{\x}%
+				\COPY{\x}{\tmpx}%
+			}%
+		}{%
+			\ifthenelse{ \equal{#2}{flat} \OR \equal{#2}{sharp}}{%
+				\ADD{\tmpx}{12}{\x}%
+				\COPY{\x}{\tmpx}%
+				\ifthenelse{ \equal{#4}{}}{}{%
+					\ADD{\tmpx}{20.5}{\x}%
+					\COPY{\x}{\tmpx}%
+				}%
+			}{%
+				\ifthenelse{ \equal{#4}{}}{}{%
+					\ADD{\tmpx}{28.5}{\x}%
+					\COPY{\x}{\tmpx}%
+				}%
+			}%
+		}%
+		\ADD{14}{\x}{\tmpx}%
+		\ADD{6}{\x}{\x}%
+		\smash{\lower 7pt\vbox{\moveleft \tmpx pt\hbox{{\textbf{/}}}}}%
+		\smash{\lower 11.4pt\vbox{\moveleft \x pt\hbox{{#6}}}}%
+	\fi%
 }
 
 %% does not work, seems like you can not have a stack inside anoter stack :D
@@ -279,7 +341,7 @@
 
 %% custom title
 \renewcommand{\maketitle}[0]{
-	\LARGE{\printtitle}\normalsize
+	\Large{\printtitle}\normalsize
 	\hfill
 	\smash{\raise1.5ex\hbox{\scriptsize{\printcomposer}\normalsize}}%
 	\bigskip
