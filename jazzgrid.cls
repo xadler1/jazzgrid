@@ -54,8 +54,6 @@
 
 %% macro for coda symbol
 \newcommand{\coda}[2]{%
-	%\renewcommand\codaratio{0}%
-	%\renewcommand\codashift{0}%
 	\DIVIDE{127}{#2}{\codaratio}%
 	\MULTIPLY{#1}{\codaratio}{\codashift}%
 	\SUBTRACT{\codashift}{\codaratio}{\codashift}%
@@ -73,12 +71,10 @@
 
 %% macro for smaller coda symbol
 \newcommand{\codasmall}[2]{%
-	%\renewcommand\codaratio{0}%
-	%\renewcommand\codashift{0}%
 	\DIVIDE{127}{#2}{\codaratio}%
 	\MULTIPLY{#1}{\codaratio}{\codashift}%
 	\SUBTRACT{\codashift}{\codaratio}{\codashift}%
-	\ADD{\codashift}{2}{\codashift}%
+	\ADD{\codashift}{4}{\codashift}%
 	\smash{\raise 34pt\vbox to 0pt {\moveright \codashift pt\hbox to 0pt{%
 		\textbf{\scriptsize{O}\normalsize}%
 		\smash{\raise 10.5pt\vbox to 0pt {\moveleft 11.5pt\hbox to 0pt{%
