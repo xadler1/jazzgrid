@@ -4,9 +4,10 @@
 \ProvidesClass{jazzgrid}[2021/05/04 LaTeX class for chord grids]
 
 %% Page geometry options
-\DeclareOption{margins}{
-  \PassOptionsToPackage{left=20mm, right=8mm, top=10mm, bottom=10mm}{geometry}
-}
+%\DeclareOption{margins}{
+%  \PassOptionsToPackage{geometry}
+%}
+
 
 %% Fallback
 \DeclareOption*{
@@ -23,7 +24,7 @@
 \LoadClass[a4paper,12pt]{article}
 
 %% Load additional packages and commands.
-\RequirePackage{geometry}
+\RequirePackage[left=20mm, right=8mm, top=10mm, bottom=10mm]{geometry}
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
 \RequirePackage{stackengine}
@@ -58,9 +59,36 @@
 \newcommand\npletend{0}%
 \newcommand\nplethalf{0}%
 
+\newcommand\tablewidth{\strip@pt\textwidth}%
+\newcommand\barwidth{0}%
+\newcommand\barhalf{0}%
+\newcommand\barthird{0}%
+\newcommand\barfourth{0}%
+\newcommand\rules{\strip@pt\arrayrulewidth}%
+
+\MULTIPLY{\rules}{5}{\rules}%
+\SUBTRACT{\tablewidth}{\rules}{\tablewidth}
+\DIVIDE{\tablewidth}{4}{\barwidth}%
+%\SUBTRACT{\barwidth}{2}{\barwidth}
+\DIVIDE{\barwidth}{4}{\barfourth}%
+\DIVIDE{\barwidth}{3}{\barthird}%
+\DIVIDE{\barwidth}{2}{\barhalf}%
+\SUBTRACT{\barfourth}{2}{\barfourth}
+\SUBTRACT{\barthird}{3}{\barthird}
+\SUBTRACT{\barhalf}{4}{\barhalf}
+
+%% show holes for binder
+\newcommand{\showbinderholes}[0]{%
+\smash{\raise 0 pt\vbox to 0pt {\moveleft 0 pt\hbox to 0pt{%
+	\begin{tikzpicture}[]%
+		\draw (0,0) circle [radius=2pt];
+	\end{tikzpicture}%
+}}}%
+}
+
 %% macro for coda symbol
 \newcommand{\coda}[2]{%
-	\DIVIDE{126.96875}{#2}{\codaratio}%
+	\DIVIDE{\barwidth}{#2}{\codaratio}%
 	\MULTIPLY{#1}{\codaratio}{\codashift}%
 	\SUBTRACT{\codashift}{\codaratio}{\codashift}%
 	\ADD{\codashift}{2}{\codashift}%
@@ -77,7 +105,7 @@
 
 %% macro for smaller coda symbol
 \newcommand{\codasmall}[2]{%
-	\DIVIDE{126.96875}{#2}{\codaratio}%
+	\DIVIDE{\barwidth}{#2}{\codaratio}%
 	\MULTIPLY{#1}{\codaratio}{\codashift}%
 	\SUBTRACT{\codashift}{\codaratio}{\codashift}%
 	\ADD{\codashift}{4}{\codashift}%
@@ -206,12 +234,12 @@
 		}%
 		\ifthenelse{ \equal{#4}{} }{%
 			\ifthenelse{ \equal{#5}{maj} }{%
-				\smash{\raise 8pt\vbox{%
+				\smash{\raise 4pt\vbox{%
 				\notestack{\tiny}{\musicmaj}%
 				}}%
 			}{}%
 			\ifthenelse{ \equal{#5}{dim} }{%
-				\smash{\raise 8pt\vbox{%
+				\smash{\raise 4pt\vbox{%
 					\notestack{\tiny}{\musicdim}%
 				}}%
 			}{}%
@@ -243,7 +271,7 @@
 %% macro for one line of four bars
 \newcommand{\barline}[4]{
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{ | m{126.96875pt} | m{126.96875pt}| m{126.96875pt} | m{126.96875pt} | }
+	\begin{tabular}[c]{ @{}|@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}|@{} }
 		{#1} & {#2} & {#3} & {#4}
 	\end{tabular}%
 	\medskip%
@@ -258,7 +286,7 @@
 		\raggedleft
 	}%
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{ | m{126.96875pt} | m{126.96875pt} | m{126.96875pt} | }%
+	\begin{tabular}[c]{ |@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}| }%
 		{#2} & {#3} & {#4}
 	\end{tabular}%
 	\medskip%
@@ -273,7 +301,7 @@
 		\raggedleft
 	}%
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{  | m{126.96875pt} | m{126.96875pt} | }%
+	\begin{tabular}[c]{  |@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}| }%
 		{#2} & {#3}
 	\end{tabular}%
 	\medskip%
@@ -288,7 +316,7 @@
 		\raggedleft
 	}%
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{ | m{126.96875pt} | }%
+	\begin{tabular}[c]{ |@{} m{\barwidth pt} @{}| }%
 		{#2}
 	\end{tabular}%
 	\medskip%
@@ -297,22 +325,22 @@
 
 %% macro for bar with four beats
 \newcommand{\barfour}[5]{
-	\begin{tabular}[c]{ m{0pt} m{28pt} m{28pt} m{28pt} m{28pt} }
+	\begin{tabular}[c]{m{0pt}m{\barfourth pt}@{}m{\barfourth pt}@{}m{\barfourth pt}@{}m{\barfourth pt}@{} }
 		{#1} & {#2} & {#3} & {#4} & {#5}
 	\end{tabular}
 }
 
 %% macro for bar with three beats
 \newcommand{\barthree}[4]{
-	\begin{tabular}[c]{ m{0pt} m{38pt} m{38pt} m{38pt} }
+	\begin{tabular}[c]{ m{0pt}m{\barthird pt}@{}m{\barthird pt}@{}m{\barthird pt}@{} }
 		{#1} & {#2} & {#3} & {#4}
 	\end{tabular}
 }
 
 %% macro for voltas
 \newcommand{\nvolta}[1]{
-	\smash{\raise 34pt\vbox to 0pt {\vfil \moveleft 4pt\hbox to 0pt{
-	\begin{tikzpicture}[]
+	\smash{\raise 34pt\vbox to 0pt {\vfil \moveright 1pt\hbox to 0pt{%
+	\begin{tikzpicture}[]%
 		\draw (0pt,0pt) --
 		(0pt,8pt) --
 		(2pt,8pt) node[align=right,below,inner sep=0pt,outer sep=0pt]
@@ -381,7 +409,7 @@
 
 %% nplet macro; start of nplet, end of nplet, maximum width of nplet, number, position (above/under)
 \newcommand{\nplet}[5]{
-	\DIVIDE{126.96875}{#3}{\npletratio}%
+	\DIVIDE{\barwidth}{#3}{\npletratio}%
 	\SUBTRACT{#1}{1}{\npletshift}%
 	\MULTIPLY{\npletratio}{\npletshift}{\npletshift}%
 	\SUBTRACT{#2}{#1}{\npletlength}%
