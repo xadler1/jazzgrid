@@ -73,8 +73,8 @@
 \DIVIDE{\barwidth}{4}{\barfourth}%
 \DIVIDE{\barwidth}{3}{\barthird}%
 \DIVIDE{\barwidth}{2}{\barhalf}%
-\SUBTRACT{\barfourth}{2}{\barfourth}
-\SUBTRACT{\barthird}{3}{\barthird}
+\SUBTRACT{\barfourth}{4}{\barfourth}
+\SUBTRACT{\barthird}{4}{\barthird}
 \SUBTRACT{\barhalf}{4}{\barhalf}
 
 %% show holes for binder
@@ -325,14 +325,14 @@
 
 %% macro for bar with four beats
 \newcommand{\barfour}[5]{
-	\begin{tabular}[c]{m{0pt}m{\barfourth pt}@{}m{\barfourth pt}@{}m{\barfourth pt}@{}m{\barfourth pt}@{} }
+	\begin{tabular}[c]{ m{0pt} m{\barfourth pt} m{\barfourth pt} m{\barfourth pt} m{\barfourth pt} }
 		{#1} & {#2} & {#3} & {#4} & {#5}
 	\end{tabular}
 }
 
 %% macro for bar with three beats
 \newcommand{\barthree}[4]{
-	\begin{tabular}[c]{ m{0pt}m{\barthird pt}@{}m{\barthird pt}@{}m{\barthird pt}@{} }
+	\begin{tabular}[c]{ m{0pt} m{\barthird pt} m{\barthird pt} m{\barthird pt} }
 		{#1} & {#2} & {#3} & {#4}
 	\end{tabular}
 }
