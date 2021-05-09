@@ -53,12 +53,14 @@
 \newcommand\codashift{0}%
 \newcommand\codaratio{0}%
 \newcommand\npletshift{0}%
-\newcommand\npletratio{0}%
+\newcommand\npletlength{0}%
+\newcommand\npletstart{0}%
+\newcommand\npletend{0}%
 \newcommand\nplethalf{0}%
 
 %% macro for coda symbol
 \newcommand{\coda}[2]{%
-	\DIVIDE{127}{#2}{\codaratio}%
+	\DIVIDE{126.96875}{#2}{\codaratio}%
 	\MULTIPLY{#1}{\codaratio}{\codashift}%
 	\SUBTRACT{\codashift}{\codaratio}{\codashift}%
 	\ADD{\codashift}{2}{\codashift}%
@@ -75,7 +77,7 @@
 
 %% macro for smaller coda symbol
 \newcommand{\codasmall}[2]{%
-	\DIVIDE{127}{#2}{\codaratio}%
+	\DIVIDE{126.96875}{#2}{\codaratio}%
 	\MULTIPLY{#1}{\codaratio}{\codashift}%
 	\SUBTRACT{\codashift}{\codaratio}{\codashift}%
 	\ADD{\codashift}{4}{\codashift}%
@@ -256,7 +258,7 @@
 		\raggedleft
 	}%
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{ | m{127pt} | m{127pt} | m{127pt} | }%
+	\begin{tabular}[c]{ | m{126.96875pt} | m{126.96875pt} | m{126.96875pt} | }%
 		{#2} & {#3} & {#4}
 	\end{tabular}%
 	\medskip%
@@ -271,7 +273,7 @@
 		\raggedleft
 	}%
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{  | m{127pt} | m{127pt} | }%
+	\begin{tabular}[c]{  | m{126.96875pt} | m{126.96875pt} | }%
 		{#2} & {#3}
 	\end{tabular}%
 	\medskip%
@@ -286,7 +288,7 @@
 		\raggedleft
 	}%
 	\def\arraystretch{1.85}%
-	\begin{tabular}[c]{ | m{127pt} | }%
+	\begin{tabular}[c]{ | m{126.96875pt} | }%
 		{#2}
 	\end{tabular}%
 	\medskip%
@@ -377,24 +379,43 @@
 	\leftrepeat #1 \rightrepeat%
 }
 
-%% nplet macro; width of nplet, maximum width of nplet, number
-\newcommand{\nplet}[3]{
-	\DIVIDE{127}{#2}{\npletratio}%
-	\MULTIPLY{#1}{\npletratio}{\npletshift}%
-	\MULTIPLY{#1}{4}{\nplethalf}%
-	\SUBTRACT{\npletshift}{\nplethalf}{\npletshift}%
-	\DIVIDE{\npletshift}{2}{\nplethalf}%
-	%\npletshift
-	\smash{\lower 5pt\vbox to 0pt {\vfil \moveleft 4pt\hbox to 0pt{
+%% nplet macro; start of nplet, end of nplet, maximum width of nplet, number, position (above/under)
+\newcommand{\nplet}[5]{
+	\DIVIDE{126.96875}{#3}{\npletratio}%
+	\SUBTRACT{#1}{1}{\npletshift}%
+	\MULTIPLY{\npletratio}{\npletshift}{\npletshift}%
+	\SUBTRACT{#2}{#1}{\npletlength}%
+	\MULTIPLY{\npletlength}{5}{\nplethalf}%
+	\ADD{1}{\npletlength}{\npletlength}%
+	\MULTIPLY{\npletratio}{\npletlength}{\npletlength}%
+	\SUBTRACT{\npletlength}{\nplethalf}{\npletlength}%
+	\DIVIDE{\npletlength}{2}{\nplethalf}%
+	\ADD{\npletlength}{\npletshift}{\npletlength}%
+	\ADD{\nplethalf}{\npletshift}{\nplethalf}%
+	%
+	\ifthenelse{ \equal{#5}{above}}{%
+	\smash{\raise 30pt\vbox to 0pt {\vfil \moveright \npletshift pt\hbox to 0pt{%
 	\begin{tikzpicture}[]
-		\draw (0pt,0pt) --
-		(0pt,-4pt) --
-		(\nplethalf pt,-4pt) node[align=center,below,inner sep=0pt,outer sep=0pt]
-			{\smash{\lower 1pt\vbox to 0pt{\vfil \hbox to 0pt{\tiny{#3}\normalsize}}}} --
-		(\npletshift pt,-4pt) --
-		(\npletshift pt,0pt);
+		\draw (\npletshift pt,0pt) --
+		(\npletshift pt,4pt) --
+		(\nplethalf pt,4pt) node[align=center,above,inner sep=0pt,outer sep=0pt]
+			{\smash{\raise 7pt\vbox to 0pt{\vfil \hbox to 0pt{\tiny{#4}\normalsize}}}} --
+		(\npletlength pt,4pt) --
+		(\npletlength pt,0pt);
 	\end{tikzpicture}
 	}}}%
+	}{%
+	\smash{\lower 5pt\vbox to 0pt {\vfil \moveright \npletshift pt\hbox to 0pt{%
+	\begin{tikzpicture}[]
+		\draw (\npletshift pt,0pt) --
+		(\npletshift pt,-4pt) --
+		(\nplethalf pt,-4pt) node[align=center,below,inner sep=0pt,outer sep=0pt]
+			{\smash{\lower 2pt\vbox to 0pt{\vfil \hbox to 0pt{\tiny{#4}\normalsize}}}} --
+		(\npletlength pt,-4pt) --
+		(\npletlength pt,0pt);
+	\end{tikzpicture}
+	}}}%
+	}%
 }
 
 %% custom title
