@@ -31,6 +31,7 @@
 \RequirePackage[minimal]{leadsheets}
 %\RequirePackage{musicography}
 \RequirePackage{ifthen}
+\RequirePackage{graphicx}
 \RequirePackage{amssymb}
 \RequirePackage{array}
 \RequirePackage{calculator}
@@ -69,7 +70,6 @@
 \MULTIPLY{\rules}{5}{\rules}%
 \SUBTRACT{\tablewidth}{\rules}{\tablewidth}
 \DIVIDE{\tablewidth}{4}{\barwidth}%
-%\SUBTRACT{\barwidth}{2}{\barwidth}
 \DIVIDE{\barwidth}{4}{\barfourth}%
 \DIVIDE{\barwidth}{3}{\barthird}%
 \DIVIDE{\barwidth}{2}{\barhalf}%
@@ -201,12 +201,12 @@
 	\else%
 		\renewcommand\y{10}%
 
-		\smash{\raise 7pt\vbox to 0pt{\moveleft 6pt\hbox to 0pt{{
+		\smash{\raise 7pt\vbox to 0pt{\moveleft 0pt\hbox to 0pt{{%
 			\begin{tikzpicture}[]%
 				\ifthenelse{ \equal{#3}{minor} }{%
-					\draw [thick] (0,0) -- (28pt,0);
+					\draw [thick] (0,0) -- (26pt,0);
 				}{%
-					\draw [thick] (0,0) -- (20pt,0);
+					\draw [thick] (0,0) -- (18pt,0);
 				}%
 			\end{tikzpicture}%
 		}}}}%
@@ -409,23 +409,29 @@
 
 %% nplet macro; start of nplet, end of nplet, maximum width of nplet, number, position (above/under)
 \newcommand{\nplet}[5]{
+	\,%
 	\DIVIDE{\barwidth}{#3}{\npletratio}%
-	\SUBTRACT{#1}{1}{\npletshift}%
-	\MULTIPLY{\npletratio}{\npletshift}{\npletshift}%
+	\SUBTRACT{\npletratio}{4}{\npletratio}%
+	%\MULTIPLY{\npletratio}{\npletshift}{\npletshift}%
 	\SUBTRACT{#2}{#1}{\npletlength}%
-	\MULTIPLY{\npletlength}{5}{\nplethalf}%
 	\ADD{1}{\npletlength}{\npletlength}%
-	\MULTIPLY{\npletratio}{\npletlength}{\npletlength}%
-	\SUBTRACT{\npletlength}{\nplethalf}{\npletlength}%
+	\MULTIPLY{\npletlength}{\npletratio}{\npletlength}%
 	\DIVIDE{\npletlength}{2}{\nplethalf}%
-	\ADD{\npletlength}{\npletshift}{\npletlength}%
-	\ADD{\nplethalf}{\npletshift}{\nplethalf}%
-	%
+	\SUBTRACT{#1}{1}{\npletshift}%
+	%\npletshift%
+	\MULTIPLY{\npletshift}{\npletratio}{\npletshift}%
+	%\npletshift%
+	%\MULTIPLY{\npletratio}{\npletlength}{\npletlength}%
+	%\SUBTRACT{\npletlength}{\nplethalf}{\npletlength}%
+	%\DIVIDE{\npletlength}{2}{\nplethalf}%
+	%\ADD{\npletlength}{\npletshift}{\npletlength}%
+	%\ADD{\nplethalf}{\npletshift}{\nplethalf}%
+	%\MULTIPLY{\barfourth}{\npletshift}{\npletshift}%
 	\ifthenelse{ \equal{#5}{above}}{%
 	\smash{\raise 30pt\vbox to 0pt {\vfil \moveright \npletshift pt\hbox to 0pt{%
 	\begin{tikzpicture}[]
-		\draw (\npletshift pt,0pt) --
-		(\npletshift pt,4pt) --
+		\draw (0pt,0pt) --
+		(0pt,4pt) --
 		(\nplethalf pt,4pt) node[align=center,above,inner sep=0pt,outer sep=0pt]
 			{\smash{\raise 7pt\vbox to 0pt{\vfil \hbox to 0pt{\tiny{#4}\normalsize}}}} --
 		(\npletlength pt,4pt) --
@@ -435,16 +441,19 @@
 	}{%
 	\smash{\lower 5pt\vbox to 0pt {\vfil \moveright \npletshift pt\hbox to 0pt{%
 	\begin{tikzpicture}[]
-		\draw (\npletshift pt,0pt) --
-		(\npletshift pt,-4pt) --
+		\draw (0pt,0pt) --
+		(0pt,-4pt) --
 		(\nplethalf pt,-4pt) node[align=center,below,inner sep=0pt,outer sep=0pt]
-			{\smash{\lower 2pt\vbox to 0pt{\vfil \hbox to 0pt{\tiny{#4}\normalsize}}}} --
+			{\smash{\lower 1pt\vbox to 0pt{\vfil \hbox to 0pt{\tiny{#4}\normalsize}}}} --
 		(\npletlength pt,-4pt) --
 		(\npletlength pt,0pt);
 	\end{tikzpicture}
 	}}}%
 	}%
 }
+
+\newcommand{\plus}[1]{#1\smash{\lower 0.5pt\vbox{\moveleft 0.5pt\hbox{\texttt{+}}}}}
+\newcommand{\minus}[1]{#1\smash{\lower 0pt\vbox{\moveleft 0.5pt\hbox{\texttt{-}}}}}
 
 %% custom title
 \renewcommand{\maketitle}[0]{
