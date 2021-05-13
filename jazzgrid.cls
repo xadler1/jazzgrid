@@ -18,7 +18,7 @@
 \LoadClass[a4paper,12pt]{article}
 
 %% Load additional packages and commands.
-\RequirePackage[left=20mm, right=8mm, top=8mm, bottom=10mm]{geometry}
+\RequirePackage[left=20mm, right=8mm, top=6mm, bottom=8mm]{geometry}
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
 \RequirePackage{stackengine}
@@ -442,7 +442,6 @@
 
 	\Large{\printtitle\vphantom{pÁ}}\normalsize
 	\hfill
-	\bigskip
 	\bigskip
 }
 
