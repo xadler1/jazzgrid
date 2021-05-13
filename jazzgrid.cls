@@ -3,12 +3,6 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{jazzgrid}[2021/05/04 LaTeX class for chord grids]
 
-%% Page geometry options
-%\DeclareOption{margins}{
-%  \PassOptionsToPackage{geometry}
-%}
-
-
 %% Fallback
 \DeclareOption*{
   \ClassWarning{myclass}{Unknown option '\CurrentOption'}
@@ -24,12 +18,11 @@
 \LoadClass[a4paper,12pt]{article}
 
 %% Load additional packages and commands.
-\RequirePackage[left=20mm, right=8mm, top=10mm, bottom=10mm]{geometry}
+\RequirePackage[left=20mm, right=8mm, top=8mm, bottom=10mm]{geometry}
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
 \RequirePackage{stackengine}
 \RequirePackage[minimal]{leadsheets}
-%\RequirePackage{musicography}
 \RequirePackage{ifthen}
 \RequirePackage{graphicx}
 \RequirePackage{amssymb}
@@ -122,20 +115,17 @@
 
 
 %% environment for sections
-\newenvironment{musicsection}[1]
-	{%
+\newenvironment{musicsection}[1]{%
 	\reversemarginpar%
-	\marginpar%
-		{%
-			\begin{flushright}%
-				\smash{\lower1.0em\hbox{%
-					\begin{tikzpicture}[]%
-						\draw (1,0) node[line width=1pt,draw] {\tiny\textbf{#1}\normalsize};
-					\end{tikzpicture}%
-				}}%
-			\end{flushright}%
-		}
-	}
+	\marginpar{%
+		\begin{flushright}%
+			\smash{\lower1.0em\hbox{%
+				\begin{tikzpicture}[]%
+					\draw (1,0) node[line width=1pt,draw] {\tiny\textbf{#1}\normalsize};
+				\end{tikzpicture}%
+			}}%
+		\end{flushright}%
+	}}%
 	{%
 	\hrule%
 	\medskip%
@@ -361,15 +351,15 @@
 }
 
 %% macro for setting the composer
-\newcommand{\composer}[1]{
-	\newcommand\printcomposer{#1}
+\newcommand{\composer}[1]{%
+	\newcommand\printcomposer{#1}%
 }
 
 %% macro for setting the tempo
 \newcommand{\tempo}[1]{
 	\newcommand\printtempo{%
-		\ifthenelse{ \equal{#1}{} }{
-			\phantom{bpm}%
+		\ifthenelse{ \equal{#1}{} }{%
+			\phantom{\tiny{bpm}\normalsize}%
 		}{%
 			\tiny{{#1}bpm}\normalsize%
 		}%
@@ -412,21 +402,12 @@
 	\,%
 	\DIVIDE{\barwidth}{#3}{\npletratio}%
 	\SUBTRACT{\npletratio}{4}{\npletratio}%
-	%\MULTIPLY{\npletratio}{\npletshift}{\npletshift}%
 	\SUBTRACT{#2}{#1}{\npletlength}%
 	\ADD{1}{\npletlength}{\npletlength}%
 	\MULTIPLY{\npletlength}{\npletratio}{\npletlength}%
 	\DIVIDE{\npletlength}{2}{\nplethalf}%
 	\SUBTRACT{#1}{1}{\npletshift}%
-	%\npletshift%
 	\MULTIPLY{\npletshift}{\npletratio}{\npletshift}%
-	%\npletshift%
-	%\MULTIPLY{\npletratio}{\npletlength}{\npletlength}%
-	%\SUBTRACT{\npletlength}{\nplethalf}{\npletlength}%
-	%\DIVIDE{\npletlength}{2}{\nplethalf}%
-	%\ADD{\npletlength}{\npletshift}{\npletlength}%
-	%\ADD{\nplethalf}{\npletshift}{\nplethalf}%
-	%\MULTIPLY{\barfourth}{\npletshift}{\npletshift}%
 	\ifthenelse{ \equal{#5}{above}}{%
 	\smash{\raise 30pt\vbox to 0pt {\vfil \moveright \npletshift pt\hbox to 0pt{%
 	\begin{tikzpicture}[]
@@ -456,11 +437,11 @@
 \newcommand{\minus}[1]{#1\smash{\lower 0pt\vbox{\moveleft 0.5pt\hbox{\texttt{-}}}}}
 
 %% custom title
-\renewcommand{\maketitle}[0]{
-	\Large{\printtitle}\normalsize
+\renewcommand{\maketitle}[0]{%
+	\rightstack{\tiny\raggedleft}{ {\printcomposer{}\vphantom{pÁ}} {\printtempo} }
+
+	\Large{\printtitle\vphantom{pÁ}}\normalsize
 	\hfill
-	%\smash{\raise1.5ex\hbox{\tiny{\printcomposer}\normalsize}}%
-	\rightstack{\tiny\raggedleft}{ {\printcomposer} {\printtempo} }
 	\bigskip
 	\bigskip
 }
