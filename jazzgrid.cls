@@ -34,6 +34,8 @@
 \RequirePackage{graphicx}
 \RequirePackage[czech]{babel}
 \RequirePackage{amssymb}
+\RequirePackage{mathtools}
+\RequirePackage{xfrac}
 \RequirePackage{array}
 \RequirePackage{calculator}
 \RequirePackage{blindtext}
@@ -51,16 +53,42 @@
 \setlength{\marginparsep}{6pt}
 \setlength{\marginparwidth}{60pt}
 
-\newcommand\x{0}%
-\newcommand\y{0}%
+%% chord defaults
+\newcommand\chordvertshift{0}%
+
+%% coda defaults
 \newcommand\codashift{0}%
+\newcommand\codavertshiftdefault{34}%
+\newcommand\codavertshiftslim{26}%
 \newcommand\codaratio{0}%
+
+%% nvolta defaults
+\newcommand\nvoltavertshiftdefault{34}%
+\newcommand\nvoltavertshiftslim{26}%
+
+%% nplet defaults
 \newcommand\npletshift{0}%
 \newcommand\npletlength{0}%
 \newcommand\npletstart{0}%
 \newcommand\npletend{0}%
 \newcommand\nplethalf{0}%
+\newcommand\npletraisedefault{30}%
+\newcommand\npletraiseslim{22}%
+\newcommand\npletlowerdefault{5}%
+\newcommand\npletlowerslim{3}%
 
+%% tablestretch defaults
+\newcommand\tablestretchdefault{1.85}%
+\newcommand\tablestretchslim{1.5}%
+
+%% initialization of defaults
+\newcommand\tablestretch{\tablestretchdefault}
+\newcommand\nvoltavertshift{\nvoltavertshiftdefault}%
+\newcommand\codavertshift{\codavertshiftdefault}%
+\newcommand\npletraise{\npletraisedefault}%
+\newcommand\npletlower{\npletlowerdefault}%
+
+%% table dimensions calculations
 \newcommand\tablewidth{\strip@pt\textwidth}%
 \newcommand\barwidth{0}%
 \newcommand\barhalf{0}%
@@ -77,15 +105,6 @@
 \SUBTRACT{\barfourth}{4}{\barfourth}
 \SUBTRACT{\barthird}{4}{\barthird}
 \SUBTRACT{\barhalf}{4}{\barhalf}
-
-%% show holes for binder
-\newcommand{\showbinderholes}[0]{%
-\smash{\raise 0 pt\vbox to 0pt {\moveleft 0 pt\hbox to 0pt{%
-	\begin{tikzpicture}[]%
-		\draw (0,0) circle [radius=2pt];
-	\end{tikzpicture}%
-}}}%
-}
 
 %% macro for coda symbol
 \newcommand{\coda}[2]{%
@@ -110,7 +129,12 @@
 	\MULTIPLY{#1}{\codaratio}{\codashift}%
 	\SUBTRACT{\codashift}{\codaratio}{\codashift}%
 	\ADD{\codashift}{4}{\codashift}%
-	\smash{\raise 34pt\vbox to 0pt {\moveright \codashift pt\hbox to 0pt{%
+	\ifthenelse{ \equal{\tablestretch}{\tablestretchslim} }{%
+		\renewcommand\codavertshift{\codavertshiftslim}%
+	}{%
+		\renewcommand\codavertshift{\codavertshiftdefault}%
+	}%
+	\smash{\raise \codavertshift pt\vbox to 0pt {\moveright \codashift pt\hbox to 0pt{%
 		\textbf{\scriptsize{O}\normalsize}%
 		\smash{\raise 10.5pt\vbox to 0pt {\moveleft 11.5pt\hbox to 0pt{%
 			\begin{tikzpicture}[]%
@@ -123,18 +147,22 @@
 
 
 %% environment for sections
-\newenvironment{musicsection}[1]{%
+\newenvironment{musicsection}[2][full]{%
+	\ifthenelse{ \equal{#1}{slim} }{%
+		\slim{true}%
+	}{}%
 	\reversemarginpar%
 	\marginpar{%
 		\begin{flushright}%
 			\smash{\lower1.0em\hbox{%
 				\begin{tikzpicture}[]%
-					\draw (1,0) node[line width=1pt,draw] {\tiny\textbf{#1}\normalsize};
+					\draw (1,0) node[line width=1pt,draw] {\tiny\textbf{#2}\normalsize};
 				\end{tikzpicture}%
 			}}%
 		\end{flushright}%
 	}}%
 	{%
+	\slim{false}%
 	\hrule%
 	\medskip%
 	}
@@ -202,9 +230,9 @@
 %% macro for chords
 \newcommand{\chord}[6]{%
 	\ifx&#6&%
-		\renewcommand\y{0}%
+		\renewcommand\chordvertshift{0}%
 	\else%
-		\renewcommand\y{10}%
+		\renewcommand\chordvertshift{10}%
 
 		\smash{\raise 7pt\vbox to 0pt{\moveleft 0pt\hbox to 0pt{{%
 			\begin{tikzpicture}[]%
@@ -217,7 +245,7 @@
 		}}}}%
 		\smash{\lower 10pt\vbox to 0pt{\moveleft  0pt\hbox to 0pt{{#6}}}}%
 	\fi%
-	\smash{\raise \y pt\vbox{\moveleft 0pt\hbox{{%
+	\smash{\raise \chordvertshift pt\vbox{\moveleft 0pt\hbox{{%
 		\textbf{#1}%
 		\ifthenelse{ \equal{#3}{minor} }{%
 			\ifthenelse{ \equal{#2}{sharp} }{%
@@ -275,7 +303,7 @@
 
 %% macro for one line of four bars
 \newcommand{\barline}[4]{
-	\def\arraystretch{1.85}%
+	\def\arraystretch{\tablestretch}%
 	\begin{tabular}[c]{ @{}|@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}|@{} }
 		{#1} & {#2} & {#3} & {#4}
 	\end{tabular}%
@@ -290,7 +318,7 @@
 		}{
 		\raggedleft
 	}%
-	\def\arraystretch{1.85}%
+	\def\arraystretch{\tablestretch}%
 	\begin{tabular}[c]{ |@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}| }%
 		{#2} & {#3} & {#4}
 	\end{tabular}%
@@ -305,7 +333,7 @@
 		}{
 		\raggedleft
 	}%
-	\def\arraystretch{1.85}%
+	\def\arraystretch{\tablestretch}%
 	\begin{tabular}[c]{  |@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}| }%
 		{#2} & {#3}
 	\end{tabular}%
@@ -320,7 +348,7 @@
 		}{
 		\raggedleft
 	}%
-	\def\arraystretch{1.85}%
+	\def\arraystretch{\tablestretch}%
 	\begin{tabular}[c]{ |@{} m{\barwidth pt} @{}| }%
 		{#2}
 	\end{tabular}%
@@ -344,7 +372,12 @@
 
 %% macro for voltas
 \newcommand{\nvolta}[1]{
-	\smash{\raise 34pt\vbox to 0pt {\vfil \moveright 1pt\hbox to 0pt{%
+	\ifthenelse{ \equal{\tablestretch}{\tablestretchslim} }{%
+		\renewcommand\nvoltavertshift{\nvoltavertshiftslim}%
+	}{%
+		\renewcommand\nvoltavertshift{\nvoltavertshiftdefault}%
+	}%
+	\smash{\raise \nvoltavertshift pt\vbox to 0pt {\vfil \moveright 1pt\hbox to 0pt{%
 	\begin{tikzpicture}[]%
 		\draw (0pt,0pt) --
 		(0pt,8pt) --
@@ -424,7 +457,14 @@
 	\SUBTRACT{#1}{1}{\npletshift}%
 	\MULTIPLY{\npletshift}{\npletratio}{\npletshift}%
 	\ifthenelse{ \equal{#5}{above}}{%
-	\smash{\raise 30pt\vbox to 0pt {\vfil \moveright \npletshift pt\hbox to 0pt{%
+	\ifthenelse{ \equal{\tablestretch}{\tablestretchslim} }{%
+		\renewcommand\npletraise{\npletraiseslim}%
+		\renewcommand\npletlower{\npletlowerslim}%
+	}{%
+		\renewcommand\npletraise{\npletraisedefault}%
+		\renewcommand\npletlower{\npletlowerdefault}%
+	}%
+	\smash{\raise \npletraise pt\vbox to 0pt {\vfil \moveright \npletshift pt\hbox to 0pt{%
 	\begin{tikzpicture}[]
 		\draw (0pt,0pt) --
 		(0pt,4pt) --
@@ -435,7 +475,7 @@
 	\end{tikzpicture}
 	}}}%
 	}{%
-	\smash{\lower 5pt\vbox to 0pt {\vfil \moveright \npletshift pt\hbox to 0pt{%
+	\smash{\lower \npletlower pt\vbox to 0pt {\vfil \moveright \npletshift pt\hbox to 0pt{%
 	\begin{tikzpicture}[]
 		\draw (0pt,0pt) --
 		(0pt,-4pt) --
@@ -448,8 +488,18 @@
 	}%
 }
 
+%% plus/minus signs for additional notes
 \newcommand{\plus}[1]{#1\smash{\lower 0.5pt\vbox{\moveleft 0.5pt\hbox{\texttt{+}}}}}
 \renewcommand{\minus}[1]{#1\smash{\lower 0pt\vbox{\moveleft 0.5pt\hbox{\texttt{-}}}}}
+
+%% decreases vertical size of bars
+\newcommand{\slim}[1]{%
+	\ifthenelse{ \equal{#1}{true} }{%
+		\renewcommand\tablestretch{\tablestretchslim}%
+	}{%
+		\renewcommand\tablestretch{\tablestretchdefault}%
+	}%
+}
 
 %% custom title
 \renewcommand{\maketitle}[0]{%
