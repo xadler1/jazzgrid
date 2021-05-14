@@ -25,6 +25,7 @@
 \RequirePackage[minimal]{leadsheets}
 \RequirePackage{ifthen}
 \RequirePackage{graphicx}
+\RequirePackage[czech]{babel}
 \RequirePackage{amssymb}
 \RequirePackage{array}
 \RequirePackage{calculator}
@@ -169,6 +170,13 @@
 \newcommand{\rightstack}[2]{%
 	\setstackgap{S}{4pt}%
 	#1\Shortstack[r]{#2}%
+	\normalsize%
+}
+
+%% stack used for date
+\newcommand{\leftstack}[2]{%
+	\setstackgap{S}{4pt}%
+	#1\Shortstack[l]{#2}%
 	\normalsize%
 }
 
@@ -434,11 +442,14 @@
 }
 
 \newcommand{\plus}[1]{#1\smash{\lower 0.5pt\vbox{\moveleft 0.5pt\hbox{\texttt{+}}}}}
-\newcommand{\minus}[1]{#1\smash{\lower 0pt\vbox{\moveleft 0.5pt\hbox{\texttt{-}}}}}
+\renewcommand{\minus}[1]{#1\smash{\lower 0pt\vbox{\moveleft 0.5pt\hbox{\texttt{-}}}}}
 
 %% custom title
 \renewcommand{\maketitle}[0]{%
-	\rightstack{\tiny\raggedleft}{ {\printcomposer{}\vphantom{pÁ}} {\printtempo} }
+	\leftstack{\tiny}{ {\today \vphantom{pÁ}} {\vphantom{\printtempo}} }
+	\hfill
+	\rightstack{\tiny}{ {\printcomposer{}\vphantom{pÁ}} {\hfill \printtempo} }
+
 
 	\Large{\printtitle\vphantom{pÁ}}\normalsize
 	\hfill
