@@ -3,6 +3,13 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{jazzgrid}[2021/05/04 LaTeX class for chord grids]
 
+\newcommand{\timestamp}{false}
+
+%% Enable timestamps
+\DeclareOption{timestamp}{%
+	\renewcommand{\timestamp}{true}
+}
+
 %% Fallback
 \DeclareOption*{
   \ClassWarning{myclass}{Unknown option '\CurrentOption'}
@@ -446,7 +453,9 @@
 
 %% custom title
 \renewcommand{\maketitle}[0]{%
-	\leftstack{\tiny}{ {\today \vphantom{pÁ}} {\vphantom{\printtempo}} }
+	\ifthenelse{ \equal{\timestamp}{true} }{%
+		\leftstack{\tiny}{ {\today \vphantom{pÁ}} {\vphantom{\printtempo}} }
+	}{}%
 	\hfill
 	\rightstack{\tiny}{ {\printcomposer{}\vphantom{pÁ}} {\hfill \printtempo} }
 
