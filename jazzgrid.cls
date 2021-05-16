@@ -35,12 +35,14 @@
 \RequirePackage[czech]{babel}
 \RequirePackage{amssymb}
 \RequirePackage{mathtools}
+%\RequirePackage{etoolbox}
 \RequirePackage{xfrac}
 \RequirePackage{array}
 \RequirePackage{calculator}
 \RequirePackage{blindtext}
 \RequirePackage{enumitem}
 \RequirePackage{multicol}
+\RequirePackage{xstring}
 \RequirePackage{tikz}
 \RequirePackage{nopageno}
 \RequirePackage[fontsize=18pt]{fontsize}
@@ -160,35 +162,42 @@
 				\end{tikzpicture}%
 			}}%
 		\end{flushright}%
-	}}%
+	}%
+	\catcode`\#=12%
+	\catcode`\~=6%
+	}%
 	{%
 	\slim{false}%
 	\hrule%
 	\medskip%
+	\catcode`\#=6%
+	\catcode`\~=13%
 	}
 
-
 %% macro for the major seventh
-\newcommand{\musicmaj}[0]{%
-\smash{\raise 12pt\vbox to 0pt{\moveleft 2pt\hbox to 0pt{{
-\begin{tikzpicture}[]%
-	\draw (0,0) -- (4pt,0) -- (2pt,4pt) -- cycle;%
-\end{tikzpicture}%
-}}}}%
-}
+\newcommand{\musicmaj}[0]{\smash{\raise 12pt\vbox to 0pt{\moveleft 0.5pt\hbox to 0pt{\texttt{$\vartriangle$}}}}}
+%\newcommand{\musicmaj}[0]{\texttt{$\vartriangle$}}
+%\newcommand{\musicmaj}[0]{%
+%\smash{\raise 12pt\vbox to 0pt{\moveleft 0pt\hbox to 0pt{{%
+%\begin{tikzpicture}[]
+%	\draw (0,0) -- (4pt,0) -- (2pt,4pt) -- cycle;%
+%\end{tikzpicture}%
+%}}}}%
+%}
 
 %% macro for the diminished seventh
-\newcommand{\musicdim}[0]{%
-\smash{\raise 12pt\vbox to 0pt{\moveleft 2pt\hbox to 0pt{{
-\begin{tikzpicture}[]%
-	\draw (0,0) circle [radius=2pt];%
-\end{tikzpicture}%
-}}}}%
-}
+\newcommand{\musicdim}[0]{\smash{\raise 11.5pt\vbox to 0pt{\moveleft 0.5pt\hbox to 0pt{\texttt{\scriptsize$\circ$\tiny}}}}}
+%\newcommand{\musicdim}[0]{%
+%\smash{\raise 12pt\vbox to 0pt{\moveleft 2pt\hbox to 0pt{{
+%\begin{tikzpicture}[]%
+%	\draw (0,0) circle [radius=2pt];%
+%\end{tikzpicture}%
+%}}}}%
+%}
 
 %% stack used for flat/sharp/minor
 \newcommand{\mystack}[2]{%
-	\setstackgap{S}{2pt}%
+	\setstackgap{S}{1.5pt}%
 	#1\Shortstack[l]{#2}%
 	\normalsize%
 }
@@ -215,20 +224,8 @@
 	\normalsize%
 }
 
-
-%% macro for a single note name, currently unused
-\newcommand{\note}[2]{%
-	#1%
-	\ifthenelse{ \equal{#2}{sharp} }{%
-	\smash{\raise1.0ex\hbox{\scriptsize$\sharp$\normalsize}}%
-	}{}%
-	\ifthenelse{ \equal{#2}{flat} }{%
-	\smash{\raise0.8ex\hbox{\scriptsize$\flat$\normalsize}}%
-	}{}%
-}
-
 %% macro for chords
-\newcommand{\chord}[6]{%
+\newcommand{\devchord}[6]{%
 	\ifx&#6&%
 		\renewcommand\chordvertshift{0}%
 	\else%
@@ -248,21 +245,21 @@
 	\smash{\raise \chordvertshift pt\vbox{\moveleft 0pt\hbox{{%
 		\textbf{#1}%
 		\ifthenelse{ \equal{#3}{minor} }{%
-			\ifthenelse{ \equal{#2}{sharp} }{%
+			\ifthenelse{ \equal{#2}{sharp} \OR \equal{#2}{s} }{%
 				\mystack{\tiny}{\textbf{$\sharp$} \textbf{\tiny{m}\normalsize}}%
 			}{}%
-			\ifthenelse{ \equal{#2}{flat} }{%
-				\mystack{\tiny}{\textbf{$\flat$} \textbf{\tiny{m}\normalsize}}%
+			\ifthenelse{ \equal{#2}{flat} \OR \equal{#2}{f} }{%
+				\mystack{\scriptsize}{\textbf{$\flat$} \textbf{\tiny{m}\normalsize}}%
 			}{}%
 			\ifthenelse{ \equal{#2}{} }{%
 				\mystack{\tiny}{\textbf{m}}%
 			}{}%
 		}{%
-			\ifthenelse{ \equal{#2}{sharp} }{%
+			\ifthenelse{ \equal{#2}{sharp} \OR \equal{#2}{s} }{%
 				\mystack{\tiny}{\textbf{$\sharp$} \textbf{\phantom{\tiny{n}\normalsize}}}%
 			}{}%
-			\ifthenelse{ \equal{#2}{flat} }{%
-				\mystack{\tiny}{\textbf{$\flat$}  \textbf{\phantom{\tiny{n}\normalsize}}}%
+			\ifthenelse{ \equal{#2}{flat} \OR \equal{#2}{f} }{%
+				\mystack{\scriptsize}{\textbf{$\flat$}  \textbf{\phantom{\tiny{n}\normalsize}}}%
 			}{}%
 		}%
 		\ifthenelse{ \equal{#4}{} }{%
@@ -279,7 +276,7 @@
 		}{%
 			\ifthenelse{ \equal{#5}{maj} }{%
 				\smash{\raise 8pt\vbox{%
-				\notestack{\tiny}{\musicmaj #4}%
+					\notestack{\tiny}{\musicmaj #4}%
 				}}%
 			}{}%
 			\ifthenelse{ \equal{#5}{dim} }{%
@@ -399,13 +396,18 @@
 }
 
 %% macro for setting the composer
+\newcommand\printcomposer{}%
+
 \newcommand{\composer}[1]{%
-	\newcommand\printcomposer{#1}%
+	\renewcommand\printcomposer{#1}%
 }
 
+
 %% macro for setting the tempo
+\newcommand{\printtempo}{\phantom{\tiny{bpm}\normalsize}}
+
 \newcommand{\tempo}[1]{
-	\newcommand\printtempo{%
+	\renewcommand\printtempo{%
 		\ifthenelse{ \equal{#1}{} }{%
 			\phantom{\tiny{bpm}\normalsize}%
 		}{%
@@ -447,7 +449,6 @@
 
 %% nplet macro; start of nplet, end of nplet, maximum width of nplet, number, position (above/under)
 \newcommand{\nplet}[5]{
-	\,%
 	\DIVIDE{\barwidth}{#3}{\npletratio}%
 	\SUBTRACT{\npletratio}{4}{\npletratio}%
 	\SUBTRACT{#2}{#1}{\npletlength}%
@@ -464,6 +465,7 @@
 		\renewcommand\npletraise{\npletraisedefault}%
 		\renewcommand\npletlower{\npletlowerdefault}%
 	}%
+	\,%
 	\smash{\raise \npletraise pt\vbox to 0pt {\vfil \moveright \npletshift pt\hbox to 0pt{%
 	\begin{tikzpicture}[]
 		\draw (0pt,0pt) --
@@ -490,7 +492,9 @@
 
 %% plus/minus signs for additional notes
 \newcommand{\plus}[1]{#1\smash{\lower 0.5pt\vbox{\moveleft 0.5pt\hbox{\texttt{+}}}}}
+\newcommand{\plussymbol}[0]{\smash{\lower 0.5pt\vbox{\moveleft 0.5pt\hbox{\texttt{+}}}}}
 \renewcommand{\minus}[1]{#1\smash{\lower 0pt\vbox{\moveleft 0.5pt\hbox{\texttt{-}}}}}
+\newcommand{\minussymbol}[0]{\smash{\lower 0pt\vbox{\moveleft 0.5pt\hbox{\texttt{-}}}}}
 
 %% decreases vertical size of bars
 \newcommand{\slim}[1]{%
@@ -514,5 +518,209 @@
 	\hfill
 	\bigskip
 }
+
+\newcommand\firstchord{}%
+\newcommand\secondchord{}%
+
+\newcommand\chordinput{ahoj}%
+
+\newcommand\firstchordnote{}%
+\newcommand\firstchordsf{}%
+\newcommand\firstchordminor{}%
+\newcommand\firstchorddm{}%
+\newcommand\firstchordnumbers{}%
+\newcommand\firstchordexpanded{}%
+
+\newcommand\secondchordnote{}%
+\newcommand\secondchordsf{}%
+\newcommand\secondchordminor{}%
+\newcommand\secondchorddm{}%
+\newcommand\secondchordnumbers{}%
+\newcommand\secondchordexpanded{}%
+\newcommand\tmptest{}%
+
+
+\newcommand{\chord}[1]{%
+	\renewcommand\firstchordnote{}%
+	\renewcommand\firstchordsf{}%
+	\renewcommand\firstchordminor{}%
+	\renewcommand\firstchorddm{}%
+	\renewcommand\firstchordnumbers{}%
+	\renewcommand\secondchordnote{}%
+	\renewcommand\secondchordsf{}%
+	\renewcommand\secondchordminor{}%
+	\renewcommand\secondchorddm{}%
+	\renewcommand\secondchordnumbers{}%
+
+	\replacesharp{#1}
+
+%%%%%%%%% split chords
+	\StrCut{\chordinput}{/}\firstchord\secondchord%
+
+%%%%%%%%% parse chords
+%%%%%%%%% parse note
+	\StrLeft{\firstchord}{1}[\firstchordnote]%
+	\ifthenelse{ \equal{\firstchordnote}{} }{}{%
+		\StrGobbleLeft{\firstchord}{1}[\firstchord]%
+	}%
+
+	\StrLeft{\secondchord}{1}[\secondchordnote]%
+	\ifthenelse{ \equal{\secondchordnote}{} }{}{%
+		\StrGobbleLeft{\secondchord}{1}[\secondchord]%
+	}%
+
+%%%%%%%%% parse sharp/flat
+	\StrLeft{\firstchord}{1}[\firstchordsf]
+	\ifthenelse{ \equal{\firstchordsf}{s} \OR \equal{\firstchordsf}{b} }{}{
+		\renewcommand\firstchordsf{}%
+	}%
+
+	\ifthenelse{ \equal{\firstchordsf}{} }{}{%
+		\StrGobbleLeft{\firstchord}{1}[\firstchord]%
+	}%
+
+	\StrLeft{\secondchord}{1}[\secondchordsf]
+	\ifthenelse{ \equal{\secondchordsf}{s} \OR \equal{\secondchordsf}{b} }{}{
+		\renewcommand\secondchordsf{}%
+	}%
+
+	\ifthenelse{ \equal{\secondchordsf}{} }{}{%
+		\StrGobbleLeft{\secondchord}{1}[\secondchord]%
+	}%
+
+	\StrSubstitute{\firstchordsf}{b}{f}[\firstchordsf]
+	\StrSubstitute{\secondchordsf}{b}{f}[\secondchordsf]
+
+%%%%%%%%% parse numbers
+	\StrCut{\firstchord}{ }\firstchord\firstchordnumbers%
+	\StrCut{\secondchord}{ }\secondchord\secondchordnumbers%
+
+%%%%%%%%% parse minor
+%%%%%%%%% parse dim/maj
+	%\StrExpand[1]{\firstchordnumbers}{\firstchordexpanded}
+	%\StrExpand[1]{\secondchordnumbers}{\secondchordexpanded}
+	\renewcommand\firstchordexpanded{\firstchordnumbers}
+	\renewcommand\secondchordexpanded{\secondchordnumbers}
+
+	%\renewcommand\firstchorddm{\firstchordnumbers}%
+	\ifthenelse{ \equal{\firstchord}{m} }{%
+		\renewcommand\firstchordminor{minor}%
+	}{}%
+
+	\ifthenelse{ \equal{\firstchord}{mmaj} }{%
+		\renewcommand\firstchordminor{minor}%
+		\ifthenelse{ \equal{\firstchordnumbers}{} }{%
+			\renewcommand\firstchorddm{maj}%
+		}{%
+			\StrExpand[1]{\musicmaj\firstchordnumbers}{\firstchordexpanded}%
+		}%
+	}{}%
+
+
+	\ifthenelse{ \equal{\firstchord}{mdim} }{%
+		\renewcommand\firstchordminor{minor}%
+		\ifthenelse{ \equal{\firstchordnumbers}{} }{%
+			\renewcommand\firstchorddm{dim}%
+		}{%
+			\StrExpand[2]{\musicdim\firstchordnumbers}{\firstchordexpanded}%
+		}%
+	}{}%
+
+	\ifthenelse{ \equal{\firstchord}{maj} }{%
+		\ifthenelse{ \equal{\firstchordnumbers}{} }{%
+			\renewcommand\firstchorddm{maj}%
+		}{%
+			\StrExpand[2]{\musicmaj\firstchordnumbers}{\firstchordexpanded}%
+		}%
+	}{}%
+
+	\ifthenelse{ \equal{\firstchord}{dim} }{%
+		\ifthenelse{ \equal{\firstchordexpanded}{} }{%
+			\renewcommand\firstchorddm{dim}%
+		}{%
+			\StrExpand[2]{\musicdim\firstchordnumbers}{\firstchordexpanded}%
+		}%
+	}{}%
+
+
+	\ifthenelse{ \equal{\secondchord}{m} }{%
+		\renewcommand\secondchordminor{minor}%
+	}{}%
+
+	\ifthenelse{ \equal{\secondchord}{mmaj} }{%
+		\renewcommand\secondchordminor{minor}%
+		\ifthenelse{ \equal{\secondchordnumbers}{} }{%
+			\renewcommand\secondchorddm{maj}%
+		}{%
+			\StrExpand[1]{\musicmaj\secondchordnumbers}{\secondchordexpanded}%
+		}%
+	}{}%
+
+
+	\ifthenelse{ \equal{\secondchord}{mdim} }{%
+		\renewcommand\secondchordminor{minor}%
+		\ifthenelse{ \equal{\secondchordnumbers}{} }{%
+			\renewcommand\secondchorddm{dim}%
+		}{%
+			\StrExpand[2]{\musicdim\secondchordnumbers}{\secondchordexpanded}%
+		}%
+	}{}%
+
+	\ifthenelse{ \equal{\secondchord}{maj} }{%
+		\ifthenelse{ \equal{\secondchordnumbers}{} }{%
+			\renewcommand\secondchorddm{maj}%
+		}{%
+			\StrExpand[2]{\musicmaj\secondchordnumbers}{\secondchordexpanded}%
+		}%
+	}{}%
+
+	\ifthenelse{ \equal{\secondchord}{dim} }{%
+		\ifthenelse{ \equal{\secondchordexpanded}{} }{%
+			\renewcommand\secondchorddm{dim}%
+		}{%
+			\StrExpand[2]{\musicdim\secondchordnumbers}{\secondchordexpanded}%
+		}%
+	}{}%
+
+%%%%%%%%% substitute +/- numbers
+	\expandarg
+	\StrSubstitute{\firstchordexpanded}{+}{\plussymbol}[\firstchordexpanded]%
+	\StrSubstitute{\firstchordexpanded}{-}{\minussymbol}[\firstchordexpanded]%
+
+	\StrSubstitute{\secondchordexpanded}{+}{\plussymbol}[\secondchordexpanded]%
+	\StrSubstitute{\secondchordexpanded}{-}{\minussymbol}[\secondchordexpanded]%
+
+%%%%%%%%% print chords
+	\ifthenelse{ \equal{\secondchordnote}{} }{%
+		\devchord
+		{\firstchordnote}
+		{\firstchordsf}
+		{\firstchordminor}
+		{\firstchordexpanded}
+		{\firstchorddm}{}%
+	}{%
+		\devchord
+		{\firstchordnote}
+		{\firstchordsf}
+		{\firstchordminor}
+		{\firstchordexpanded}
+		{\firstchorddm}{%
+			\devchord
+			{\secondchordnote}
+			{\secondchordsf}
+			{\secondchordminor}
+			{\secondchordexpanded}
+			{\secondchorddm}{}
+		}%
+	}%
+}
+
+\catcode`\#=12
+\catcode`\~=6
+\newcommand{\replacesharp}[1]{%
+	\StrSubstitute{~1}{#}{s}[\chordinput]
+}
+\catcode`\#=6
+\catcode`\~=13
 
 \endinput

@@ -1,7 +1,7 @@
 \documentclass{jazzgrid}
 
 \composer{Composer 1, Composer 2}
-\tempo{42}
+%\tempo{42}
 \title{\textbf{Example}}
 
 \begin{document}
@@ -16,37 +16,37 @@
 %%%%%%%% Parameter for \nvolta, \coda and \codasmall
 %%%%%%%%          |
 	{\barfour{ }
-%%%%%%%%%%%%%%%% Creates a chord
-%%%%%%%%%%%%%%%% chord root    additional notes   tone/chord to be played under
-%%%%%%%%%%%%%%%%    |                   |                  |
-%%%%%%%%%%%%%%%%    |  sharp/flat       |   major 7th /    |
-%%%%%%%%%%%%%%%%    +---+  |            | diminished 7th   |
-%%%%%%%%%%%%%%%%        |  |     minor/ |    |             |
-%%%%%%%%%%%%%%%%        |  |     major  |    |             |
-%%%%%%%%%%%%%%%%        |  |       |    |    |      +------+
-%%%%%%%%%%%%%%%%        |  |       |    |    |      |
-		{\chord{B}{flat}{minor}{\minus{5}}{maj}{\chord{D}{}{}{}{}{}}}
+%%%%%%%%%%%%%%%% Creates the same chord using simplified syntax
+%%%%%%%%%%%%%%%% chord root                 tone/chord to be played under, same order
+%%%%%%%%%%%%%%%%    | sharp/flat (#/b)                  |
+%%%%%%%%%%%%%%%%    +---+|   diminished 7th (maj/dim)   |
+%%%%%%%%%%%%%%%%        ||minor/ | major 7th            |
+%%%%%%%%%%%%%%%%        ||major  |                      |
+%%%%%%%%%%%%%%%%        ||| +----+   additional notes   |
+%%%%%%%%%%%%%%%%        ||| |  +---------+              |
+%%%%%%%%%%%%%%%%        ||| |  |  +---------------------+
+		{\chord{Bbmmaj 5- 2+/D}}
 		{}
-		{\chord{A}{sharp}{}{}{}{}}
-		{\chord{A}{flat}{}{}{}{}}
+		{\chord{A#}}
+		{\chord{Ab}}
 	}
 	{\barfour{}
-		{\chord{B}{}{}{}{}{}}
+		{\chord{Bbmmaj 5- 2+/D}}
 		{}
-		{\chord{B}{sharp}{}{}{}{}}
-		{\chord{B}{flat}{}{}{}{}}
+		{\chord{B#}}
+		{\chord{Bb}}
 	}
 	{\barfour{}
-		{\chord{C}{}{}{}{}{}}
+		{\chord{C}}
 		{}
-		{\chord{C}{sharp}{}{}{}{}}
-		{\chord{C}{flat}{}{}{}{}}
+		{\chord{C#}}
+		{\chord{Cb}}
 	}
 	{\barfour{}
-		{\chord{D}{flat}{minor}{9 7 \minus{5}}{}{}}
-		{\chord{D}{sharp}{minor}{11 7}{}{}}
-		{\chord{D}{flat}{minor}{9 7 \minus{5}}{}{}}
-		{\chord{D}{sharp}{minor}{13 9}{}{}}
+		{\chord{Dbm 9 7 5-}}
+		{\chord{D#m 11 7}}
+		{\chord{Dbm 9 7 5-}}
+		{\chord{D#m 13 9}}
 	}
 \barline
 %%%%%%%%%%%%%%%%%% Creates a coda symbol (in the first quarter)
@@ -55,28 +55,28 @@
 %%%%%%%%%%%%%%%%%%           | number of positions in bar
 %%%%%%%%%%%%%%%%%%           |  |
 	{\barfour{\codasmall{1}{4}}
-		{\chord{E}{}{}{}{}{}}
+		{\chord{E}}
 		{}
-		{\chord{E}{sharp}{}{}{}{}}
-		{\chord{E}{flat}{}{}{}{}}
+		{\chord{E#}}
+		{\chord{Eb}}
 	}
 	{\barfour{}
-		{\chord{F}{}{}{}{}{}}
+		{\chord{F}}
 		{}
-		{\chord{F}{sharp}{}{}{}{}}
-		{\chord{F}{flat}{}{}{}{}}
+		{\chord{F#}}
+		{\chord{Fb}}
 	}
 	{\barfour{}
-		{\chord{G}{}{}{}{}{}}
+		{\chord{G}}
 		{}
-		{\chord{G}{sharp}{}{}{}{}}
-		{\chord{G}{flat}{}{}{}{}}
+		{\chord{G#}}
+		{\chord{Gb}}
 	}
 	{\barfour{}
-		{\chord{A}{flat}{minor}{9 7 \minus{5}}{}{}}
+		{\chord{Abm 9 7 5-}}
 		{}
-		{\chord{B}{sharp}{minor}{\plus{5}}{maj}{}}
-		{\chord{C}{flat}{}{}{dim}{}}
+		{\chord{B#mmaj 5+}}
+		{\chord{Cbdim}}
 	}
 \end{musicsection}
 
@@ -86,46 +86,46 @@
 %%%%%%%% Parameter for \nvolta, \coda and \codasmall
 %%%%%%%%           |
 	{\barthree{ }
-		{\chord{A}{}{}{1}{}{}}
-		{\chord{B}{}{}{2}{}{}}
-		{\chord{C}{}{}{3}{}{}}
+		{\chord{A 1 2}}
+		{\chord{B 2 2}}
+		{\chord{C 3 2}}
 	}
 	{\barthree{}
-		{\chord{D}{}{}{4}{}{}}
-		{\chord{E}{}{}{5}{}{}}
-		{\chord{F}{}{}{6}{}{}}
+		{\chord{D 4 5}}
+		{\chord{E 5 5}}
+		{\chord{F 6 5}}
 	}
 	{\barthree{}
-		{\chord{G}{}{}{7}{}{}}
+		{\chord{G 7 5}}
 		{}
 		{}
 	}
 	{\barthree{}
-		{\chord{C}{}{}{9}{}{}}
+		{\chord{C 9 7}}
 		{}
 		{}
 	}
 \barline
 	{\barthree{}
-		{\chord{A}{sharp}{minor}{9 1}{}{\chord{G}{flat}{}{}{}{}}}
-		{\chord{B}{}{minor}{7 2}{}{\chord{F}{sharp}{}{}{}{}}}
-		{\chord{C}{flat}{minor}{6 3}{}{\chord{E}{flat}{}{}{}{}}}
+		{\chord{A#m 9 1/Gb}}
+		{\chord{Bm 7 2/F#}}
+		{\chord{Cbm 6 3/Eb}}
 	}
 	{\barthree{}
-		{\chord{D}{}{minor}{11 5 4}{}{\chord{D}{sharp}{}{}{}{}}}
-		{\chord{E}{sharp}{minor}{13 4 5}{}{\chord{C}{sharp}{}{}{}{}}}
-		{\chord{F}{}{minor}{15 3 6}{}{\chord{B}{flat}{}{}{}{}}}
+		{\chord{Dm 11 5 4/D#}}
+		{\chord{E#m 13 4 5/C#}}
+		{\chord{Fm 15 3 6/Bb}}
 	}
 %%%%%%%%%%%%%%%%%%% Creates a nvolta (primavolta in this case)
 %%%%%%%%%%%%%%%%%%%    description
 %%%%%%%%%%%%%%%%%%%        |
 	{\barthree{\nvolta{1.}}
-		{\chord{G}{}{}{}{dim}{\chord{A}{sharp}{}{}{}{}}}
+		{\chord{Gdim/A#}}
 		{}
 		{}
 	}
 	{\barthree{}
-		{\chord{G}{}{}{}{}{}}
+		{\chord{G}}
 		{}
 		{}
 	}
@@ -135,39 +135,40 @@
 %%          |
 \barlinetwo{right}
 	{\barthree{\nvolta{2.}}
-		{\chord{G}{}{}{}{dim}{\chord{B}{flat}{}{}{}{}}}
+		{\chord{Gdim/Bb}}
 		{}
 		{}
 	}
 	{\barthree{}
-		{\chord{G}{}{minor}{9 7}{}{}}
+		{\chord{Gm 9 7}}
 		{}
 		{}
 	}
 \end{musicsection}
 
-\begin{musicsection}{coda}
+%% Section can be slim, which reduces the bar height
+\begin{musicsection}[slim]{coda}
 \barline
 	{\barfour{}
-		{\chord{D}{}{minor}{7}{}{}}
+		{\chord{Dm 7}}
 		{}
 		{}
 		{}
 	}
 	{\barfour{}
-		{\chord{G}{}{}{7}{}{}}
+		{\chord{G 7}}
 		{}
 		{}
 		{}
 	}
 	{\barfour{}
-		{\chord{D}{}{minor}{7}{}{}}
+		{\chord{Dm 7}}
 		{}
 		{}
 		{}
 	}
 	{\barfour{}
-		{\chord{G}{}{}{7}{}{}}
+		{\chord{G 7}}
 		{}
 		{}
 		{}
@@ -177,25 +178,25 @@
 \begin{musicsection}{Crazy}
 \barline
 	{\barfour{}
-		{\chord{A}{}{}{}{maj}{}}
+		{\chord{Amaj}}
 		{}
 		{}
 		{}
 	}
 	{\barfour{}
-		{\chord{A}{}{}{}{dim}{}}
+		{\chord{Adim}}
 		{}
 		{}
 		{}
 	}
 	{\barfour{}
-		{\chord{A}{}{}{}{maj}{}}
+		{\chord{Amaj}}
 		{}
 		{}
 		{}
 	}
 	{\barfour{}
-		{\chord{A}{}{}{}{maj}{}}
+		{\chord{Amaj}}
 		{}
 		{}
 		{}
@@ -206,28 +207,28 @@
 %%          |
 \barlineone{left}
 	{\barfour{}
-		{\chord{B}{sharp}{}{}{maj}{}}
+		{\chord{B#maj}}
 		{}
 		{}
 		{}
 	}
 \barlinetwo{}
 	{\barfour{}
-		{\chord{B}{flat}{}{}{maj}{}}
-		{}
-		{}
-		{}
+		{\chord{Bbmaj}}
+		{\chord{Bbmdim}}
+		{\chord{Bmaj}}
+		{\chord{Bmaj 7 5}}
 	}
 	{\barfour{}
-		{\chord{B}{sharp}{minor}{11 9 7}{maj}{\chord{G}{flat}{minor}{7}{}{}}}
+		{\chord{B#mmaj 7 5/Gbm 7}}
 		{}
-		{}
-		{}
+		{\chord{B#mmaj 7 5/Gbm 7}}
+		{\chord{Bbmdim 7 5/G#m 7}}
 	}
 %% Creates a bar line with three bars
 %%    alignment - l/left, r/right (default)
-%%          |
-%%          |
+%%              |
+%%              |
 \barlinethree{left}
 	{\barfour{}
 %%%%%%%%%%%%%%%% Creates a rest
