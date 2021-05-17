@@ -25,7 +25,7 @@
 \LoadClass[a4paper,12pt]{article}
 
 %% Load additional packages and commands.
-\RequirePackage[left=20mm, right=8mm, top=6mm, bottom=8mm]{geometry}
+\RequirePackage[left=20mm, right=8mm, top=6mm, bottom=6mm]{geometry}
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[T1]{fontenc}
 \RequirePackage{stackengine}
@@ -396,22 +396,22 @@
 }
 
 %% macro for setting the composer
-\newcommand\printcomposer{}%
+\newcommand\printcomposer{\vphantom{ypgÁ,()}}%
 
 \newcommand{\composer}[1]{%
-	\renewcommand\printcomposer{#1}%
+	\renewcommand\printcomposer{\vphantom{ypgÁŠ()}#1}%
 }
 
 
 %% macro for setting the tempo
-\newcommand{\printtempo}{\phantom{\tiny{bpm}\normalsize}}
+\newcommand{\printtempo}{\phantom{\tiny{1234567890bpm}\normalsize}}
 
 \newcommand{\tempo}[1]{
 	\renewcommand\printtempo{%
 		\ifthenelse{ \equal{#1}{} }{%
-			\phantom{\tiny{bpm}\normalsize}%
+			\phantom{\tiny{1234567890bpm}\normalsize}%
 		}{%
-			\tiny{{#1}bpm}\normalsize%
+			\tiny{\vphantom{1234567890}{#1}bpm}\normalsize%
 		}%
 	}%
 }
@@ -424,21 +424,21 @@
 %% macro for rests
 \newcommand{\rest}[1]{
 	\scriptsize
-	\ifthenelse{ \equal{#1}{whole} \OR \equal{#1}{1} }{
+	\ifthenelse{ \equal{#1}{whole} \OR \equal{#1}{1} }{%
 		\smash{\vbox{\moveright 0.5em\hbox {\wholerest}}}%
-	}{}
-	\ifthenelse{ \equal{#1}{half} \OR \equal{#1}{2} }{
+	}{}%
+	\ifthenelse{ \equal{#1}{half} \OR \equal{#1}{2} }{%
 		\smash{\vbox{\moveright 0.5em\hbox {\halfrest}}}%
-	}{}
-	\ifthenelse{ \equal{#1}{quarter} \OR \equal{#1}{4} }{
+	}{}%
+	\ifthenelse{ \equal{#1}{quarter} \OR \equal{#1}{4} }{%
 		\smash{\vbox{\moveright 0.5em\hbox {\quarterrest}}}%
-	}{}
-	\ifthenelse{ \equal{#1}{eighth} \OR \equal{#1}{8} }{
+	}{}%
+	\ifthenelse{ \equal{#1}{eighth} \OR \equal{#1}{8} }{%
 		\smash{\vbox{\moveright 0.5em\hbox {\eighthrest}}}%
-	}{}
-	\ifthenelse{ \equal{#1}{sixteenth} \OR \equal{#1}{16} }{
+	}{}%
+	\ifthenelse{ \equal{#1}{sixteenth} \OR \equal{#1}{16} }{%
 		\smash{\vbox{\moveright 0.5em\hbox {\sixteenthrest}}}%
-	}{}
+	}{}%
 	\normalsize
 }
 
@@ -449,6 +449,7 @@
 
 %% nplet macro; start of nplet, end of nplet, maximum width of nplet, number, position (above/under)
 \newcommand{\nplet}[5]{
+	\,%
 	\DIVIDE{\barwidth}{#3}{\npletratio}%
 	\SUBTRACT{\npletratio}{4}{\npletratio}%
 	\SUBTRACT{#2}{#1}{\npletlength}%
@@ -465,7 +466,6 @@
 		\renewcommand\npletraise{\npletraisedefault}%
 		\renewcommand\npletlower{\npletlowerdefault}%
 	}%
-	\,%
 	\smash{\raise \npletraise pt\vbox to 0pt {\vfil \moveright \npletshift pt\hbox to 0pt{%
 	\begin{tikzpicture}[]
 		\draw (0pt,0pt) --
@@ -508,13 +508,13 @@
 %% custom title
 \renewcommand{\maketitle}[0]{%
 	\ifthenelse{ \equal{\timestamp}{true} }{%
-		\leftstack{\tiny}{ {\today \vphantom{pÁ}} {\vphantom{\printtempo}} }
+		\leftstack{\tiny}{ {\today \vphantom{ygpÁŠČ,()}} {\vphantom{\printtempo}} }
 	}{}%
 	\hfill
-	\rightstack{\tiny}{ {\printcomposer{}\vphantom{pÁ}} {\hfill \printtempo} }
+	\rightstack{\tiny}{ {\printcomposer{}\vphantom{ypgÁŠ,()}} {\hfill \printtempo} }
 
 
-	\Large{\printtitle\vphantom{pÁ}}\normalsize
+	\Large{\printtitle\vphantom{ypgiÁ,Š()}}\normalsize
 	\hfill
 	\bigskip
 }
@@ -597,12 +597,10 @@
 
 %%%%%%%%% parse minor
 %%%%%%%%% parse dim/maj
-	%\StrExpand[1]{\firstchordnumbers}{\firstchordexpanded}
-	%\StrExpand[1]{\secondchordnumbers}{\secondchordexpanded}
-	\renewcommand\firstchordexpanded{\firstchordnumbers}
-	\renewcommand\secondchordexpanded{\secondchordnumbers}
+	% have to be expanded for +/- substitution to work
+	\StrExpand[1]{\firstchordnumbers}{\firstchordexpanded}
+	\StrExpand[1]{\secondchordnumbers}{\secondchordexpanded}
 
-	%\renewcommand\firstchorddm{\firstchordnumbers}%
 	\ifthenelse{ \equal{\firstchord}{m} }{%
 		\renewcommand\firstchordminor{minor}%
 	}{}%
@@ -612,7 +610,7 @@
 		\ifthenelse{ \equal{\firstchordnumbers}{} }{%
 			\renewcommand\firstchorddm{maj}%
 		}{%
-			\StrExpand[1]{\musicmaj\firstchordnumbers}{\firstchordexpanded}%
+			\StrExpand[2]{\musicmaj\firstchordnumbers}{\firstchordexpanded}%
 		}%
 	}{}%
 
@@ -652,7 +650,7 @@
 		\ifthenelse{ \equal{\secondchordnumbers}{} }{%
 			\renewcommand\secondchorddm{maj}%
 		}{%
-			\StrExpand[1]{\musicmaj\secondchordnumbers}{\secondchordexpanded}%
+			\StrExpand[2]{\musicmaj\secondchordnumbers}{\secondchordexpanded}%
 		}%
 	}{}%
 
