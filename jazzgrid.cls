@@ -442,7 +442,7 @@
 
 %% macro for setting the title
 \renewcommand{\title}[1]{
-	\newcommand\printtitle{#1}
+	\newcommand\printtitle{\textbf{#1}}
 }
 
 %% macro for rests
