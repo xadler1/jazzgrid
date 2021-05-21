@@ -35,7 +35,7 @@
 \RequirePackage[czech]{babel}
 \RequirePackage{amssymb}
 \RequirePackage{mathtools}
-%\RequirePackage{etoolbox}
+\RequirePackage{pgf}
 \RequirePackage{xfrac}
 \RequirePackage{array}
 \RequirePackage{calculator}
@@ -55,8 +55,12 @@
 \setlength{\marginparsep}{6pt}
 \setlength{\marginparwidth}{60pt}
 
+%% characters for vertical spacing
+\newcommand\characters{AÁBCČDĎEÉĚFGHIÍJKLMNOÓPQRŘSŠTŤUŮÚVWXYÝZŽaábcčdďeéěfghiíjklmnoópqrřsštťuůúvwxyýzž()\{\},.:;0123456789}%
+
 %% chord defaults
 \newcommand\chordvertshift{0}%
+\newcommand\slashlinewidth{0}%
 
 %% coda defaults
 \newcommand\codashift{0}%
@@ -176,24 +180,9 @@
 
 %% macro for the major seventh
 \newcommand{\musicmaj}[0]{\smash{\raise 12pt\vbox to 0pt{\moveleft 0.5pt\hbox to 0pt{\texttt{$\vartriangle$}}}}}
-%\newcommand{\musicmaj}[0]{\texttt{$\vartriangle$}}
-%\newcommand{\musicmaj}[0]{%
-%\smash{\raise 12pt\vbox to 0pt{\moveleft 0pt\hbox to 0pt{{%
-%\begin{tikzpicture}[]
-%	\draw (0,0) -- (4pt,0) -- (2pt,4pt) -- cycle;%
-%\end{tikzpicture}%
-%}}}}%
-%}
 
 %% macro for the diminished seventh
 \newcommand{\musicdim}[0]{\smash{\raise 11.5pt\vbox to 0pt{\moveleft 0.5pt\hbox to 0pt{\texttt{\scriptsize$\circ$\tiny}}}}}
-%\newcommand{\musicdim}[0]{%
-%\smash{\raise 12pt\vbox to 0pt{\moveleft 2pt\hbox to 0pt{{
-%\begin{tikzpicture}[]%
-%	\draw (0,0) circle [radius=2pt];%
-%\end{tikzpicture}%
-%}}}}%
-%}
 
 %% stack used for flat/sharp/minor
 \newcommand{\mystack}[2]{%
@@ -230,21 +219,31 @@
 		\renewcommand\chordvertshift{0}%
 	\else%
 		\renewcommand\chordvertshift{10}%
+		\pgfmathwidth{"\textbf{#1}"}%
+		\renewcommand\slashlinewidth{\pgfmathresult}%
+
+		\ifthenelse{ \equal{#3}{minor} \OR \equal{#3}{m} }{%
+			\ifthenelse{ \equal{#4}{} \AND \equal{#5}{} }{%
+				\pgfmathwidth{"\textbf{#1\tiny{m}\normalsize}"}%
+			}{%
+				\pgfmathwidth{"\textbf{#1\tiny{m7}\normalsize}"}%
+			}%
+		}{
+			\ifthenelse{ \equal{#4}{} \AND \equal{#5}{} }{%
+				\pgfmathwidth{"\textbf{#1\tiny{}\normalsize}"}%
+			}{%
+				\pgfmathwidth{"\textbf{#1\tiny{1}\normalsize}"}%
+			}%
+		}%
 
 		\smash{\raise 7pt\vbox to 0pt{\moveleft 0pt\hbox to 0pt{{%
-			\begin{tikzpicture}[]%
-				\ifthenelse{ \equal{#3}{minor} }{%
-					\draw [thick] (0,0) -- (26pt,0);
-				}{%
-					\draw [thick] (0,0) -- (18pt,0);
-				}%
-			\end{tikzpicture}%
+			\rule{\slashlinewidth pt}{1pt}
 		}}}}%
-		\smash{\lower 10pt\vbox to 0pt{\moveleft  0pt\hbox to 0pt{{#6}}}}%
+		\smash{\lower 10pt\vbox to 0pt{\moveleft 0pt\hbox to 0pt{{#6}}}}%
 	\fi%
 	\smash{\raise \chordvertshift pt\vbox{\moveleft 0pt\hbox{{%
 		\textbf{#1}%
-		\ifthenelse{ \equal{#3}{minor} }{%
+		\ifthenelse{ \equal{#3}{minor} \OR \equal{#3}{m} }{%
 			\ifthenelse{ \equal{#2}{sharp} \OR \equal{#2}{s} }{%
 				\mystack{\tiny}{\textbf{$\sharp$} \textbf{\tiny{m}\normalsize}}%
 			}{}%
@@ -396,22 +395,22 @@
 }
 
 %% macro for setting the composer
-\newcommand\printcomposer{\vphantom{ypgÁ,()}}%
+\newcommand\printcomposer{\vphantom{\characters}}%
 
 \newcommand{\composer}[1]{%
-	\renewcommand\printcomposer{\vphantom{ypgÁŠ()}#1}%
+	\renewcommand\printcomposer{\vphantom{\characters}#1}%
 }
 
 
 %% macro for setting the tempo
-\newcommand{\printtempo}{\phantom{\tiny{1234567890bpm}\normalsize}}
+\newcommand{\printtempo}{\vphantom{\tiny{\characters}\normalsize}}
 
 \newcommand{\tempo}[1]{
 	\renewcommand\printtempo{%
 		\ifthenelse{ \equal{#1}{} }{%
-			\phantom{\tiny{1234567890bpm}\normalsize}%
+			\vphantom{\tiny{\characters}\normalsize}%
 		}{%
-			\tiny{\vphantom{1234567890}{#1}bpm}\normalsize%
+			\tiny{\vphantom{\characters}{#1}bpm}\normalsize%
 		}%
 	}%
 }
@@ -508,13 +507,13 @@
 %% custom title
 \renewcommand{\maketitle}[0]{%
 	\ifthenelse{ \equal{\timestamp}{true} }{%
-		\leftstack{\tiny}{ {\today \vphantom{ygpÁŠČ,()}} {\vphantom{\printtempo}} }
+		\leftstack{\tiny}{ {\today \vphantom{\characters}} {\vphantom{\printtempo}} }
 	}{}%
 	\hfill
-	\rightstack{\tiny}{ {\printcomposer{}\vphantom{ypgÁŠ,()}} {\hfill \printtempo} }
+	\rightstack{\tiny}{ {\printcomposer{}\vphantom{\characters}} {\hfill \printtempo} }
 
 
-	\Large{\printtitle\vphantom{ypgiÁ,Š()}}\normalsize
+	\Large{\printtitle\vphantom{\characters}}\normalsize
 	\hfill
 	\bigskip
 }
