@@ -60,6 +60,8 @@
 
 %% chord defaults
 \newcommand\chordvertshift{0}%
+\newcommand\slashlinewidthupper{0}%
+\newcommand\slashlinewidthlower{0}%
 \newcommand\slashlinewidth{0}%
 
 %% coda defaults
@@ -213,28 +215,51 @@
 	\normalsize%
 }
 
+%% measures width for lower slash line, saves it to \slashwidthlower
+\newcommand{\chordwidthlower}[5]{%
+	\pgfmathwidth{"\textbf{#1}"}%
+	\ifthenelse{ \equal{#3}{minor} \OR \equal{#3}{m} }{%
+		\ifthenelse{ \equal{#4}{} \AND \equal{#5}{} }{%
+			\pgfmathwidth{"\textbf{#1\tiny{m}\normalsize}"}%
+		}{%
+			\pgfmathwidth{"\textbf{#1\tiny{m7}\normalsize}"}%
+		}%
+	}{%
+		\ifthenelse{ \equal{#4}{} \AND \equal{#5}{} }{%
+			\pgfmathwidth{"\textbf{#1\tiny{}\normalsize}"}%
+		}{%
+			\pgfmathwidth{"\textbf{#1\tiny{1}\normalsize}"}%
+		}%
+	}%
+	\StrExpand[1]{\pgfmathresult}{\slashlinewidthlower}%
+}
+
+%% measures width for upper slash line, saves it to \slashwidthupper
+\newcommand{\chordwidthupper}[5]{%
+	\pgfmathwidth{"\textbf{#1}"}%
+	\ifthenelse{ \equal{#3}{minor} \OR \equal{#3}{m} }{%
+		\ifthenelse{ \equal{#4}{} \AND \equal{#5}{} }{%
+			\pgfmathwidth{"\textbf{#1\tiny{m}\normalsize}"}%
+		}{%
+			\pgfmathwidth{"\textbf{#1\tiny{m7}\normalsize}"}%
+		}%
+	}{%
+		\ifthenelse{ \equal{#4}{} \AND \equal{#5}{} }{%
+			\pgfmathwidth{"\textbf{#1\tiny{}\normalsize}"}%
+		}{%
+			\pgfmathwidth{"\textbf{#1\tiny{1}\normalsize}"}%
+		}%
+	}%
+	\StrExpand[1]{\pgfmathresult}{\slashlinewidthupper}%
+}
+
 %% macro for chords
 \newcommand{\devchord}[6]{%
 	\ifx&#6&%
 		\renewcommand\chordvertshift{0}%
 	\else%
 		\renewcommand\chordvertshift{10}%
-		\pgfmathwidth{"\textbf{#1}"}%
-		\renewcommand\slashlinewidth{\pgfmathresult}%
-
-		\ifthenelse{ \equal{#3}{minor} \OR \equal{#3}{m} }{%
-			\ifthenelse{ \equal{#4}{} \AND \equal{#5}{} }{%
-				\pgfmathwidth{"\textbf{#1\tiny{m}\normalsize}"}%
-			}{%
-				\pgfmathwidth{"\textbf{#1\tiny{m7}\normalsize}"}%
-			}%
-		}{
-			\ifthenelse{ \equal{#4}{} \AND \equal{#5}{} }{%
-				\pgfmathwidth{"\textbf{#1\tiny{}\normalsize}"}%
-			}{%
-				\pgfmathwidth{"\textbf{#1\tiny{1}\normalsize}"}%
-			}%
-		}%
+		\MAX{\slashlinewidthlower}{\slashlinewidthupper}{\slashlinewidth}%
 
 		\smash{\raise 7pt\vbox to 0pt{\moveleft 0pt\hbox to 0pt{{%
 			\rule{\slashlinewidth pt}{1pt}
@@ -696,6 +721,20 @@
 		{\firstchordexpanded}
 		{\firstchorddm}{}%
 	}{%
+		\chordwidthlower
+		{\firstchordnote}
+		{\firstchordsf}
+		{\firstchordminor}
+		{\firstchordexpanded}
+		{\firstchorddm}
+
+		\chordwidthupper
+		{\secondchordnote}
+		{\secondchordsf}
+		{\secondchordminor}
+		{\secondchordexpanded}
+		{\secondchorddm}
+
 		\devchord
 		{\firstchordnote}
 		{\firstchordsf}
