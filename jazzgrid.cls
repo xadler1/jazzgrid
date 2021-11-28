@@ -55,6 +55,11 @@
 \setlength{\marginparsep}{6pt}
 \setlength{\marginparwidth}{60pt}
 
+%% vertical space defaults
+\newcommand\bigvertspace{\vspace{12pt}}%
+\newcommand\medvertspace{\vspace{5pt}}%
+\newcommand\smallvertspace{\vspace{3pt}}%
+
 %% characters for vertical spacing
 \newcommand\characters{AÁBCČDĎEÉĚFGHIÍJKLMNOÓPQRŘSŠTŤUŮÚVWXYÝZŽaábcčdďeéěfghiíjklmnoópqrřsštťuůúvwxyýzž()\{\},.:;0123456789}%
 
@@ -175,7 +180,7 @@
 	{%
 	\slim{false}%
 	\hrule%
-	\medskip%
+	\medvertspace%
 	\catcode`\#=6%
 	\catcode`\~=13%
 	}
@@ -328,7 +333,7 @@
 	\begin{tabular}[c]{ @{}|@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}|@{} }
 		{#1} & {#2} & {#3} & {#4}
 	\end{tabular}%
-	\medskip%
+	\medvertspace%
 
 }
 
@@ -343,7 +348,7 @@
 	\begin{tabular}[c]{ |@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}| }%
 		{#2} & {#3} & {#4}
 	\end{tabular}%
-	\medskip%
+	\medvertspace%
 
 }
 
@@ -358,7 +363,7 @@
 	\begin{tabular}[c]{  |@{}m{\barwidth pt}@{}|@{}m{\barwidth pt}@{}| }%
 		{#2} & {#3}
 	\end{tabular}%
-	\medskip%
+	\medvertspace%
 
 }
 
@@ -373,7 +378,7 @@
 	\begin{tabular}[c]{ |@{} m{\barwidth pt} @{}| }%
 		{#2}
 	\end{tabular}%
-	\medskip%
+	\medvertspace%
 
 }
 
@@ -540,7 +545,7 @@
 
 	\Large{\printtitle\vphantom{\characters}}\normalsize
 	\hfill
-	\bigskip
+	\bigvertspace
 }
 
 \newcommand\firstchord{}%
