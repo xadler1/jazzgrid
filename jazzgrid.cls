@@ -103,21 +103,41 @@
 
 %% table dimensions calculations
 \newcommand\tablewidth{\strip@pt\textwidth}%
+\newcommand\tablewidthfour{0}%
+\newcommand\tablewidtheight{0}%
 \newcommand\barwidth{0}%
+\newcommand\barwidtheight{0}%
 \newcommand\barhalf{0}%
 \newcommand\barthird{0}%
 \newcommand\barfourth{0}%
+\newcommand\rulesfive{0}%
+\newcommand\rulesnine{0}%
 \newcommand\rules{\strip@pt\arrayrulewidth}%
 
-\MULTIPLY{\rules}{5}{\rules}%
-\SUBTRACT{\tablewidth}{\rules}{\tablewidth}
-\DIVIDE{\tablewidth}{4}{\barwidth}%
+\MULTIPLY{\rules}{5}{\rulesfive}%
+\MULTIPLY{\rules}{9}{\rulesnine}%
+
+\SUBTRACT{\tablewidth}{\rulesfive}{\tablewidthfour}
+\DIVIDE{\tablewidthfour}{4}{\barwidth}%
+
+\SUBTRACT{\tablewidth}{\rulesnine}{\tablewidtheight}
+\DIVIDE{\tablewidtheight}{8}{\barwidtheight}%
+
 \DIVIDE{\barwidth}{4}{\barfourth}%
 \DIVIDE{\barwidth}{3}{\barthird}%
 \DIVIDE{\barwidth}{2}{\barhalf}%
+
+\DIVIDE{\barwidtheight}{4}{\bareightfourth}%
+\DIVIDE{\barwidtheight}{3}{\bareightthird}%
+\DIVIDE{\barwidtheight}{2}{\bareighthalf}%
+
 \SUBTRACT{\barfourth}{4}{\barfourth}
 \SUBTRACT{\barthird}{4}{\barthird}
 \SUBTRACT{\barhalf}{4}{\barhalf}
+
+\SUBTRACT{\bareightfourth}{8}{\bareightfourth}
+\SUBTRACT{\bareightthird}{8}{\bareightthird}
+\SUBTRACT{\bareighthalf}{8}{\bareighthalf}
 
 %% macro for coda symbol
 \newcommand{\coda}[2]{%
@@ -382,6 +402,16 @@
 
 }
 
+%% macro for one line of eight bars
+\newcommand{\barlineeight}[8]{
+	\def\arraystretch{\tablestretch}%
+	\begin{tabular}[c]{ @{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{} }
+		{#1} & {#2} & {#3} & {#4} & {#5} & {#6} & {#7} & {#8}
+	\end{tabular}%
+	\medvertspace%
+
+}
+
 %% macro for bar with four beats
 \newcommand{\barfour}[5]{
 	\begin{tabular}[c]{ m{0pt} m{\barfourth pt} m{\barfourth pt} m{\barfourth pt} m{\barfourth pt} }
@@ -393,6 +423,27 @@
 \newcommand{\barthree}[4]{
 	\begin{tabular}[c]{ m{0pt} m{\barthird pt} m{\barthird pt} m{\barthird pt} }
 		{#1} & {#2} & {#3} & {#4}
+	\end{tabular}
+}
+
+%% macro for half-size bar with four beats
+\newcommand{\bareightfour}[5]{
+	\begin{tabular}[c]{ m{0pt} m{\bareightfourth pt} m{\bareightfourth pt} m{\bareightfourth pt} m{\bareightfourth pt} }
+		{#1} & {#2} & {#3} & {#4} & {#5}
+	\end{tabular}
+}
+
+%% macro for half-size bar with three beats
+\newcommand{\bareightthree}[4]{
+	\begin{tabular}[c]{ m{0pt} m{\bareighthalf pt} m{\bareighthalf pt} m{\bareighthalf pt} }
+		{#1} & {#2} & {#3} & {#4}
+	\end{tabular}
+}
+
+%% macro for half-size bar with two beats
+\newcommand{\bareighttwo}[3]{
+	\begin{tabular}[c]{ m{0pt} m{\bareighthalf pt} m{\bareighthalf pt} }
+		{#1} & {#2} & {#3}
 	\end{tabular}
 }
 
