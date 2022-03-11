@@ -111,16 +111,16 @@
 \newcommand\barthird{0}%
 \newcommand\barfourth{0}%
 \newcommand\rulesfive{0}%
-\newcommand\rulesnine{0}%
+\newcommand\ruleseleven{0}%
 \newcommand\rules{\strip@pt\arrayrulewidth}%
 
 \MULTIPLY{\rules}{5}{\rulesfive}%
-\MULTIPLY{\rules}{9}{\rulesnine}%
+\MULTIPLY{\rules}{11}{\ruleseleven}%
 
 \SUBTRACT{\tablewidth}{\rulesfive}{\tablewidthfour}
 \DIVIDE{\tablewidthfour}{4}{\barwidth}%
 
-\SUBTRACT{\tablewidth}{\rulesnine}{\tablewidtheight}
+\SUBTRACT{\tablewidth}{\ruleseleven}{\tablewidtheight}
 \DIVIDE{\tablewidtheight}{8}{\barwidtheight}%
 
 \DIVIDE{\barwidth}{4}{\barfourth}%
@@ -405,7 +405,7 @@
 %% macro for one line of eight bars
 \newcommand{\barlineeight}[8]{
 	\def\arraystretch{\tablestretch}%
-	\begin{tabular}[c]{ @{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{} }
+	\begin{tabular}[c]{ @{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}|@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{} }
 		{#1} & {#2} & {#3} & {#4} & {#5} & {#6} & {#7} & {#8}
 	\end{tabular}%
 	\medvertspace%
