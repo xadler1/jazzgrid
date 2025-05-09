@@ -104,8 +104,10 @@
 %% table dimensions calculations
 \newcommand\tablewidth{\strip@pt\textwidth}%
 \newcommand\tablewidthfour{0}%
+\newcommand\tablewidtfive{0}%
 \newcommand\tablewidtheight{0}%
 \newcommand\barwidth{0}%
+\newcommand\barwidthfive{0}%
 \newcommand\barwidtheight{0}%
 \newcommand\barhalf{0}%
 \newcommand\barthird{0}%
@@ -115,10 +117,14 @@
 \newcommand\rules{\strip@pt\arrayrulewidth}%
 
 \MULTIPLY{\rules}{5}{\rulesfive}%
+\MULTIPLY{\rules}{6}{\rulessix}%
 \MULTIPLY{\rules}{11}{\ruleseleven}%
 
 \SUBTRACT{\tablewidth}{\rulesfive}{\tablewidthfour}
 \DIVIDE{\tablewidthfour}{4}{\barwidth}%
+
+\SUBTRACT{\tablewidth}{\rulessix}{\tablewidthfive}
+\DIVIDE{\tablewidthfive}{5}{\barwidthfive}%
 
 \SUBTRACT{\tablewidth}{\ruleseleven}{\tablewidtheight}
 \DIVIDE{\tablewidtheight}{8}{\barwidtheight}%
@@ -127,6 +133,10 @@
 \DIVIDE{\barwidth}{3}{\barthird}%
 \DIVIDE{\barwidth}{2}{\barhalf}%
 
+\DIVIDE{\barwidthfive}{4}{\barfivefourth}%
+\DIVIDE{\barwidthfive}{3}{\barfivethird}%
+\DIVIDE{\barwidthfive}{2}{\barfivehalf}%
+
 \DIVIDE{\barwidtheight}{4}{\bareightfourth}%
 \DIVIDE{\barwidtheight}{3}{\bareightthird}%
 \DIVIDE{\barwidtheight}{2}{\bareighthalf}%
@@ -134,6 +144,10 @@
 \SUBTRACT{\barfourth}{4}{\barfourth}
 \SUBTRACT{\barthird}{4}{\barthird}
 \SUBTRACT{\barhalf}{4}{\barhalf}
+
+\SUBTRACT{\barfivefourth}{5}{\barfivefourth}
+\SUBTRACT{\barfivethird}{5}{\barfivethird}
+\SUBTRACT{\barfivehalf}{5}{\barfivehalf}
 
 \SUBTRACT{\bareightfourth}{8}{\bareightfourth}
 \SUBTRACT{\bareightthird}{8}{\bareightthird}
@@ -403,6 +417,16 @@
 }
 
 %% macro for one line of eight bars
+\newcommand{\barlinefive}[5]{
+	\def\arraystretch{\tablestretch}%
+	\begin{tabular}[c]{ @{}|@{}m{\barwidthfive pt}@{}|@{}m{\barwidthfive pt}@{}|@{}m{\barwidthfive pt}@{}|@{}m{\barwidthfive pt}@{}|@{}|@{}|@{}m{\barwidthfive pt}@{}| }
+		{#1} & {#2} & {#3} & {#4} & {#5}
+	\end{tabular}%
+	\medvertspace%
+
+}
+
+%% macro for one line of eight bars
 \newcommand{\barlineeight}[8]{
 	\def\arraystretch{\tablestretch}%
 	\begin{tabular}[c]{ @{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}|@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{}m{\barwidtheight pt}@{}|@{} }
@@ -425,6 +449,21 @@
 		{#1} & {#2} & {#3} & {#4}
 	\end{tabular}
 }
+
+%% macro for bar with four beats
+\newcommand{\barfivefour}[5]{
+	\begin{tabular}[c]{ m{0pt} m{\barfivefourth pt} m{\barfivefourth pt} m{\barfivefourth pt} m{\barfivefourth pt} }
+		{#1} & {#2} & {#3} & {#4} & {#5}
+	\end{tabular}
+}
+
+%% macro for bar with three beats
+\newcommand{\barfivethree}[4]{
+	\begin{tabular}[c]{ m{0pt} m{\barfivethird pt} m{\barfivethird pt} m{\barfivethird pt} }
+		{#1} & {#2} & {#3} & {#4}
+	\end{tabular}
+}
+
 
 %% macro for half-size bar with four beats
 \newcommand{\bareightfour}[5]{
